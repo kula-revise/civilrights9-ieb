@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Three Days of Peace and Music | Civil Society Protests: Other Movements | Kula Revise</title>
+<title>Putting It Together | Civil Society Protests: Civil Rights and Other Movements | Kula Revise</title>
 <style>
   /* ============================================================
      KULA SOURCE ENGINE v3: TOKEN CONTRACT
@@ -32,8 +32,8 @@
     --a1: #B4622D;   --a1-rgb: 180,98,45;
     --a2: #1F6B58;   --a2-rgb: 31,107,88;
     --serif: Georgia, 'Times New Roman', serif;
-    --sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    --mono: ui-monospace, 'Cascadia Code', Consolas, 'Courier New', monospace;
+    --sans:  system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --mono:  var(--sans);
 
     /* ---- DERIVED TOKENS. A skin should not need to touch these. ----
        They exist because the engine used to hardcode fourteen literal
@@ -172,9 +172,9 @@
   --ink-deep: #0A0E15;
   --a2-deep:  #063E88;
   /* type: a grotesque carries the history, a serif is kept for documents only */
-  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --serif: Georgia, 'Times New Roman', serif;
-  --mono: ui-monospace, 'Cascadia Code', Consolas, 'Courier New', monospace;
+  --sans:  'Archivo', 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --serif: 'Source Serif 4', 'Charter', Georgia, serif;
+  --mono:  'IBM Plex Mono', ui-monospace, Consolas, monospace;
 }
 
 /* Ground: a faint horizontal lane rule. Angola rules vertically, so this reads
@@ -573,32 +573,6 @@ body.dark .figure img { filter: brightness(0.9) contrast(1.02); }
   .srcpeek .peek-body { padding: 0 0.85rem 0.85rem; font-size: 0.94rem; line-height: 1.62; border-top: 1px solid var(--rule); margin: 0 0.85rem; padding-left: 0; padding-right: 0; }
   .srcpeek .peek-body p { margin: 0.7rem 0 0; }
 
-  /* v2.1 multi-source reopen. Tabs plus a swipeable track, so every source in
-     the file is reachable from any question. Absent on a single-source lesson,
-     which renders exactly as it did before. */
-  .srcpeek.multi .peek-body { padding-bottom: 0.5rem; }
-  .peek-tabs { display: flex; gap: 0.4rem; overflow-x: auto; padding: 0.7rem 0 0.6rem;
-    -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-  .peek-tabs::-webkit-scrollbar { display: none; }
-  .peek-tab { flex: 0 0 auto; min-height: 40px; padding: 0.45rem 0.85rem;
-    font-family: var(--sans); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
-    text-transform: uppercase; cursor: pointer;
-    background: transparent; color: var(--muted);
-    border: 1px solid var(--rule); border-radius: 0; }
-  .peek-tab.on { background: var(--a1); color: var(--on-a1); border-color: var(--a1); }
-  .peek-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch; scrollbar-width: none; gap: 0; }
-  .peek-track::-webkit-scrollbar { display: none; }
-  .peek-slide { flex: 0 0 100%; scroll-snap-align: start; padding-right: 0.1rem; }
-  .peek-slide .peek-attr { font-family: var(--sans); font-size: 0.66rem; font-weight: 700;
-    line-height: 1.45; color: var(--muted); padding-bottom: 0.5rem; margin-bottom: 0.6rem;
-    border-bottom: 1px solid var(--rule); }
-  .peek-slide p { margin: 0.7rem 0 0; }
-  .srcpeek.multi::after { content: "Swipe, or choose a source above."; display: block;
-    font-family: var(--sans); font-size: 0.66rem; letter-spacing: 0.06em; color: var(--muted);
-    padding: 0.55rem 0 0.2rem; }
-  .srcpeek.multi:not([open])::after { display: none; }
-
   .marks { font-family: var(--mono, var(--sans)); font-size: 0.68rem; letter-spacing: 0.1em;
     text-transform: uppercase; color: var(--a1); font-weight: 700; margin-left: 0.7rem; }
   .q-meta { margin-bottom: 0.9rem; }
@@ -794,6 +768,78 @@ body.dark .inter-item.ok span, body.dark .inter-item.ok .rank { color: var(--on-
 }
 
 
+/* ---- Multi source reopen strip, ported in so a question about a
+   later source can still reach the earlier one. ---- */
+  .srcpeek { border: 1px solid var(--clay); background: rgba(var(--a1-rgb),0.07); margin: 0 0 1rem; }
+  .srcpeek summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 0.7rem; padding: 0.8rem 0.85rem; color: var(--clay); }
+  .srcpeek summary::-webkit-details-marker { display: none; }
+  .srcpeek .chev { flex: 0 0 auto; transition: transform 0.18s ease; }
+  .srcpeek[open] .chev { transform: rotate(90deg); }
+  .srcpeek .peek-cue { font-family: var(--sans); font-size: 0.92rem; font-weight: 700; line-height: 1.25; color: var(--ink); }
+  .srcpeek .peek-who { display: block; font-family: var(--sans); font-size: 0.66rem; letter-spacing: 0.09em; text-transform: uppercase; font-weight: 400; color: var(--muted); margin-top: 0.25rem; }
+  .srcpeek[open] .peek-cue { color: var(--muted); }
+  .srcpeek .peek-body { padding: 0 0.85rem 0.85rem; font-size: 0.94rem; line-height: 1.62; border-top: 1px solid var(--rule); margin: 0 0.85rem; padding-left: 0; padding-right: 0; }
+  .srcpeek .peek-body p { margin: 0.7rem 0 0; }
+
+  /* v2.1 multi-source reopen. Tabs plus a swipeable track, so every source in
+     the file is reachable from any question. Absent on a single-source lesson,
+     which renders exactly as it did before. */
+  .srcpeek.multi .peek-body { padding-bottom: 0.5rem; }
+  .peek-tabs { display: flex; gap: 0.4rem; overflow-x: auto; padding: 0.7rem 0 0.6rem;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .peek-tabs::-webkit-scrollbar { display: none; }
+  .peek-tab { flex: 0 0 auto; min-height: 40px; padding: 0.45rem 0.85rem;
+    font-family: var(--sans); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; cursor: pointer;
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--rule); border-radius: 0; }
+  .peek-tab.on { background: var(--a1); color: var(--on-a1); border-color: var(--a1); }
+  .peek-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none; gap: 0; }
+  .peek-track::-webkit-scrollbar { display: none; }
+  .peek-slide { flex: 0 0 100%; scroll-snap-align: start; padding-right: 0.1rem; }
+  .peek-slide .peek-attr { font-family: var(--sans); font-size: 0.66rem; font-weight: 700;
+    line-height: 1.45; color: var(--muted); padding-bottom: 0.5rem; margin-bottom: 0.6rem;
+    border-bottom: 1px solid var(--rule); }
+  .peek-slide p { margin: 0.7rem 0 0; }
+  .srcpeek.multi::after { content: "Swipe, or choose a source above."; display: block;
+    font-family: var(--sans); font-size: 0.66rem; letter-spacing: 0.06em; color: var(--muted);
+    padding: 0.55rem 0 0.2rem; }
+  .srcpeek.multi:not([open])::after { display: none; }
+
+  .marks { font-family: var(--mono, var(--sans)); font-size: 0.68rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--a1); font-weight: 700; margin-left: 0.7rem; }
+  .q-meta { margin-bottom: 0.9rem; }
+
+  /* order + sort interactions */
+  .inter { margin: 0.4rem 0 1rem; }
+  .inter-pool { display: flex; flex-direction: column; gap: 0.5rem; }
+  .inter-item { font-family: var(--serif); text-align: left; padding: 0.85rem 1rem; background: var(--sand); border: 1px solid var(--hair); cursor: pointer; font-size: 0.97rem; line-height: 1.5; color: var(--ink); display: flex; gap: 0.7rem; align-items: baseline; }
+  .inter-item:hover:not(:disabled) { border-color: var(--a1); background: var(--cut); }
+  .inter-item .rank { font-family: var(--sans); font-weight: 800; color: var(--a1); min-width: 1.4rem; }
+  .inter-placed { background: var(--cut); border-color: var(--a2); }
+  .inter-item.ok { background: var(--ok-bg); border-color: var(--a2); }
+  .inter-item.no { background: var(--no-bg); border-color: var(--clay); }
+  .sort-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+  .sort-col { background: var(--inset); border: 1px dashed var(--hair-strong); padding: 0.7rem; min-height: 4rem; }
+  .sort-col h4 { font-family: var(--sans); font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--clay); font-weight: 700; margin-bottom: 0.6rem; text-align: center; }
+  .sort-btns { display: flex; gap: 0.4rem; margin-top: 0.5rem; }
+  .sort-place { font-family: var(--sans); flex: 1; font-size: 0.78rem; font-weight: 700; padding: 0.4rem; background: var(--paper); border: 1px solid var(--hair-strong); cursor: pointer; color: var(--ink); }
+
+  /* Running summary */
+
+  /* Popup */
+
+  /* Nav */
+  .nav { display: flex; justify-content: space-between; gap: 0.8rem; margin-top: 1rem; }
+  .btn-secondary { font-family: var(--sans); padding: 0.8rem 1.2rem; background: transparent; border: 1px solid var(--hair-strong); color: var(--ink); font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+  .btn-secondary:hover:not(:disabled) { background: var(--paper); }
+  .btn-primary { font-family: var(--sans); padding: 0.85rem 1.5rem; background: var(--a2); border: none; color: var(--on-a2); font-size: 0.95rem; cursor: pointer; font-weight: 700; }
+  .btn-primary:hover:not(:disabled) { background: var(--a2-deep); }
+  .btn-primary:disabled { opacity: 0.34; cursor: not-allowed; }
+
+
+
 /* ============================================================
    MOBILE. Added August 2026.
    Everything here is inside a narrow-screen query except the tap
@@ -929,224 +975,330 @@ var KulaLMS = (function(){
    redeclaration SyntaxError and leaving FLOW undefined. */
 (function(){
 const COVER = {
-  title: "Three Days of Peace and Music",
-  lines: ["A dairy farm, and a plan for fifty thousand.", "Rain, no food, and the fences down.", "A movement that asked for nothing at all."],
-  time: "About 20 minutes"
+  "eyebrow": "Kula Revise &middot; Grade 12 History &middot; Civil Society Protests",
+  "title": "Putting It Together",
+  "lines": [
+    "Everything up to here was practice.",
+    "This one is built to exam standard, across both halves of the unit.",
+    "Twenty-eight marks, two sources, and a last answer that needs your own knowledge."
+  ],
+  "begin": "Begin Lesson 9",
+  "time": "About 30 minutes. Lesson 9 of 9.",
+  "skip": false
 };
 
 const RESULTS = {
-  "eyebrow": "Lesson 1 report",
+  "eyebrow": "Lesson 5 report",
   "title": "Where you stand",
   "next": "Continue to the check",
-  "footer": "Next: the second knowledge check, the boycott that found a method and a leader.",
+  "footer": "Next: the second knowledge check, to see what has stuck.",
   "bands": {
-    "excellent": "You can already say what a source is for and what it cannot reach. Go on to Lesson 2.",
-    "strong": "Solid. Run the recap cards once more, then go on to Lesson 2.",
-    "solid": "The shape is there. Reread Source A and the two questions about what it leaves out, then go on.",
-    "patchy": "Worth another run before Lesson 2, because Lesson 2 asks you to hold two accounts against each other.",
-    "start": "This is the lesson everything else stands on. Take it again from the top and it will settle."
+    "excellent": "Exam ready on this question. Now sit it again with a clock running.",
+    "strong": "Close. Reread the two questions you lost and then take Knowledge Check 2.",
+    "solid": "The method is there and the detail is not yet. Go back to Lesson 3, then take Knowledge Check 2.",
+    "patchy": "Work through Lessons 3 and 4 again before you come back to this.",
+    "start": "Take Lesson 1 again from the start. This run will make sense once the sequence is solid."
   }
 };
 
 const FLOW = [
   {
-    "type": "story",
-    "marker": "1969",
-    "markerLabel": "Bethel, New York &middot; August",
-    "lines": [
-      {
-        "text": "A dairy farm has been hired for a music festival billed as three days of peace and music."
-      },
-      {
-        "text": "The organisers expect about fifty thousand people."
-      },
-      {
-        "text": "Far more arrive. The roads jam, the fences come down, and it becomes a free festival because charging is no longer possible."
-      },
-      {
-        "text": "It rains for most of it. There is not enough food, water or shelter."
-      },
-      {
-        "text": "**Nothing about it worked as planned, and that became the point.**"
-      },
-      {
-        "text": "For the people there it proved a crowd that size could look after itself without anyone in charge. For many watching at home it proved the opposite."
-      }
-    ]
-  },
-  {
-    "type": "question",
-    "kind": "instinct",
-    "noSource": true,
-    "q": "Two people watch the same festival and reach opposite conclusions. What decides which one they reach?",
-    "options": [
-      "How accurately each of them remembers what happened there",
-      "What each of them already believed a society needs to work",
-      "Which newspaper each of them happened to read afterwards",
-      "How close to the stage each of them was actually standing"
-    ],
-    "correct": 1,
-    "explanation": "Both saw a crowd with no authority in charge. Whether that reads as proof or as warning depends on what you thought authority was for before you arrived. Option {opt2} matters and comes second. Hold this, because the counter-culture is judged almost entirely on that prior belief."
-  },
-  {
     "type": "content",
-    "tag": "The turn",
-    "html": "<h2>Refusing Rather Than Demanding</h2><p>Every movement in this topic so far has asked a government for something: a law, a right, a withdrawal.</p><p class=\"pull\">The counter-culture asked for nothing. It withdrew instead.</p><p>Some students protested by dropping out of society altogether and becoming hippies. They rejected conformity and materialism. Two of their slogans were <em>don't trust anyone over thirty</em> and <em>make love, not war</em>.</p><p>That difference decides how you judge it. You cannot measure a refusal by asking what law it changed.</p>",
-    "remember": "The counter-culture withdrew rather than demanded. Judge it by what it changed in the culture, not in the statute book.",
+    "tag": "How this works",
+    "html": "<h2>This one is real</h2><p>Every question below is at exam standard and at its real mark allocation. Your answers are checked against the way the paper is marked.</p><p>The total is printed on each question, and every point you make is worth two marks. Four marks wants two points, so two sentences and not one.</p><p>One thing is not real, and you should know which. The extract you are reading is a published one. The document a real paper would use is still in copyright. It has been replaced with a United States government document that carries the same evidence the official answers ask for.</p>",
+    "remember": "The wording is ours, and the allocations and the marking follow exam standard. The source is one that can be published.",
     "terms": [
       {
-        "term": "Counter-culture",
-        "def": "A way of living deliberately set against the values of the mainstream, in this case rejecting conformity, materialism and deference to authority."
-      },
-      {
-        "term": "Baby boomers",
-        "body": "",
-        "def": "The generation born in the surge in the birth rate just after the Second World War. They grew up more prosperous and better educated than their parents."
+        "term": "Marking guidelines",
+        "def": "The official document setting out what a correct answer contains. Every answer here is checked against it."
       }
     ]
   },
   {
     "type": "content",
-    "tag": "The evidence",
-    "html": "<h2>What They Actually Did</h2><p>Some lived in communes, wore psychedelic colours, and experimented with drugs and sex.</p><p>Thousands went to San Francisco in <span class=\"key\">1967</span> for what was called a Summer of Love. Two years later came the festival at Bethel, billed as three days of peace and music.</p><p>Many conservative Americans saw these activities as a serious challenge to the traditional values of society. That reaction is evidence too, and often better evidence than anything the participants said about themselves.</p>",
-    "remember": "Communes, the Summer of Love in 1967, the festival in 1969. The alarm they caused is itself evidence of what they threatened."
+    "tag": "The question",
+    "html": "<h2>What challenges were faced by people who protested in the United States in the 1960s and early 1970s?</h2><p>That is the lead question, and it is the question the final paragraph has to answer.</p><p>Hold it in mind while you read. Every sub-question below is feeding you evidence for that paragraph, and this last answer is worth six of the twenty-eight marks.</p>",
+    "terms": [
+      {
+        "term": "Last question",
+        "def": "The final item in every source question. Eight marks, and the only one that demands your own knowledge as well as the sources."
+      }
+    ]
   },
   {
     "type": "source",
     "tag": "Source A",
-    "html": "<h2>How the festival described itself</h2><p>Start with the billing. What is being promised, and to whom?</p>",
+    "sourceLabel": "Source A",
+    "html": "<h2>Read it twice before you start</h2><p>Once for what happened, and once for where the authorities are in it.</p>",
     "source": {
-      "attr": "Source A: from the advertising for the music festival held at Bethel, New York, in August 1969, and from contemporary press accounts of it.",
-      "body": "<p>The festival was billed as <em>three days of peace and music</em>, held on a dairy farm in the Catskills.</p><p>The organisers planned for around fifty thousand people and sold tickets accordingly. Far more arrived, the access roads were blocked, and the fences were taken down.</p><p>Press accounts describe heavy rain, shortages of food, water and sanitation, and a crowd that remained largely peaceful throughout.</p>",
-      "toggle": "Advertising and press reporting are two different kinds of source doing two different jobs. The billing tells you what the organisers wanted people to expect. The reporting tells you what journalists chose to record, which is not the same as everything that happened."
-    }
+      "attr": "Source A: from Proclamation 9566, Establishment of the Freedom Riders National Monument, issued by President Barack Obama on 12 January 2017. A United States government work. This source replaces a copyrighted extract from the original addendum.",
+      "body": "<p>The purpose of the 1961 Freedom Rides was to test if bus station facilities in the Deep South were complying with U.S. Supreme Court decisions. Brown v. Board of Education of Topeka (1954) had reversed the infamous 'separate but equal' doctrine in public education, and Morgan v. Virginia (1946) and Boynton v. Virginia (1960) had struck down Virginia laws compelling segregation in interstate travel &hellip;</p><p>There, a segregationist mob, including members of the Ku Klux Klan, violently attacked the Freedom Riders &hellip; one member of the mob threw a flaming bundle of rags through one of the windows that caused an explosion seconds later. The Freedom Riders struggled to escape as members of the mob attempted to trap them inside the burning bus. When they finally broke free, they received little aid for their injuries. Later that day, deacons dispatched by Reverend Fred L. Shuttlesworth of Birmingham's Bethel Baptist Church rescued the Freedom Riders from the hostile mob at Anniston Hospital and drove them to Birmingham for shelter at the church.</p><p>&hellip; the police department under the charge of Commissioner of Public Safety T. Eugene 'Bull' Connor was nowhere to be seen. After fifteen minutes of violence, the mob retreated and the police appeared.</p><p>Media coverage of the Freedom Rides inspired many people to take action &hellip; The Freedom Rides forced the Federal Government to take steps to ban segregation in interstate bus travel. On May 29, 1961, Attorney General Kennedy petitioned the Interstate Commerce Commission (ICC) to issue regulations banning segregation, and the ICC subsequently decreed that by November 1, 1961, bus carriers and terminals serving interstate travel had to be integrated.</p>",
+      "toggle": "Three things worth naming before you answer. Complying means obeying, and the whole purpose of the Rides sits on that one word: the rulings existed and nobody was following them. Rescued from the hostile mob at Anniston Hospital tells you the mob followed them to the hospital, and that nobody there dealt with it. That is why church deacons had to drive from another city. And a proclamation is a formal presidential order, written here to create a national monument. It is written to honour rather than to weigh.",
+      "toggleLabel": "What does this actually mean?"
+    },
+    "terms": [
+      {
+        "term": "Complying",
+        "def": "Obeying. The Rides existed to find out whether anyone was obeying rulings that already stood."
+      },
+      {
+        "term": "Interstate Commerce Commission",
+        "def": "The federal body regulating transport between states. Its order of 1 November 1961 is what the Rides won."
+      }
+    ]
   },
   {
     "type": "question",
     "level": "Comprehend",
     "marks": "2 marks",
-    "q": "According to Source A, how was the festival billed?",
+    "q": "3.1.1  According to Source A, how did the Freedom Riders set out to challenge racial discrimination in the USA in 1961?",
     "options": [
-      "As three days of peace and music",
-      "As a free festival open to everyone",
-      "As a protest against the war in Vietnam",
-      "As a fundraiser for a political campaign"
+      "By testing whether bus station facilities were obeying Supreme Court decisions",
+      "By asking the Supreme Court to rule against segregation in interstate travel",
+      "By refusing to use any bus company that still ran segregated services",
+      "By petitioning the federal government to send troops into the Deep South"
     ],
     "correct": 0,
-    "explanation": "Lift the billing from the source rather than from what you know happened. Option {opt1} is what it became once the fences came down. That difference is the whole story of the weekend, so do not take the outcome for the intention."
-  },
-  {
-    "type": "question",
-    "level": "Apply",
-    "marks": "2 marks",
-    "q": "The organisers planned for fifty thousand and far more came. What does that let you argue?",
-    "options": [
-      "The movement was larger than its organisers had realised",
-      "The organisers had deliberately understated the numbers",
-      "The festival was badly run and should not have happened",
-      "Most of those who came cared nothing for the music"
-    ],
-    "correct": 0,
-    "explanation": "A gap between the plan and the turnout is evidence about scale, so use it that way. Options {opt1} and {opt2} are judgements about the organisers rather than about the movement. Ask what a fact is evidence of before you decide what to do with it."
+    "explanation": "The marking wants the sentence about testing compliance, and Source A gives you it outright. Option {opt1} is the trap that costs most marks here. It reverses the point, because the rulings existed and the Rides checked whether anyone obeyed them. Write that and you have contradicted the opening line of the source."
   },
   {
     "type": "question",
     "level": "Comprehend",
     "marks": "2 marks",
-    "q": "In which year did thousands gather in San Francisco for the Summer of Love?",
+    "q": "3.1.2  In your own words, define the term constitution.",
     "options": [
-      "1967",
-      "1965",
-      "1969",
-      "1970"
+      "The document setting out the basic laws and rights of a country",
+      "A law passed by a parliament to deal with one particular issue",
+      "The written judgement a court gives when deciding an important case",
+      "An agreement between two states about how they will treat each other"
     ],
     "correct": 0,
-    "explanation": "{opt0}. Option {opt2} is the festival at Bethel, two years later. Keep the pair apart, because your account of how the counter-culture grew depends on which came first."
-  },
-  {
-    "type": "question",
-    "level": "Apply",
-    "marks": "2 marks",
-    "q": "You are asked what the counter-culture achieved. Why is that harder to answer than for the anti-war movement?",
-    "options": [
-      "It asked for nothing, so no single law shows its result",
-      "It was much smaller, so its effects were too slight to measure",
-      "It kept no records, so historians have no evidence about it",
-      "It ended too quickly for anyone to see what difference it made"
-    ],
-    "correct": 0,
-    "explanation": "A movement that demands something leaves a result you can name. A movement that refuses leaves changed expectations instead. Option {opt2} is not true, since the music, the writing and the press coverage are all evidence. Say what kind of change you are measuring before you say how much of it there was."
+    "explanation": "This is two marks for a definition, so give the full idea rather than a fragment. The marking accepts the basic laws of a country, or a framework of principles, or an outline of rights. Option {opt2} tempts you because every ruling in this unit came from a court. A court applies the constitution. The constitution is the document the court applies.",
+    "noSource": true
   },
   {
     "type": "question",
     "level": "Analyse",
     "marks": "4 marks",
-    "q": "Why did conservative Americans find the counter-culture more threatening than the anti-war marches?",
+    "q": "3.1.4  Using Source A and your own knowledge, explain what led President John F Kennedy to act against segregation.",
     "options": [
-      "A march disputes one policy, dropping out rejects them all",
-      "The counter-culture was far larger than the anti-war movement was",
-      "Marches were legal at the time and the counter-culture broke laws",
-      "The counter-culture was violent, while anti-war marches were not"
+      "The publicity forced him, and the violence had become a national issue",
+      "Congress had passed a law obliging the President to act by that date",
+      "The bus companies asked the government to settle the question for them",
+      "The Supreme Court instructed the President to enforce its earlier rulings"
     ],
     "correct": 0,
-    "explanation": "You name the difference in kind. A policy can be argued about and changed. A refusal of the values underneath it cannot be answered by changing a policy. Option {opt2} is not true of most of what the counter-culture did, and option {opt3} inverts the record."
+    "explanation": "Four marks means two developed points, so give the pressure and the reason it worked. Source A hands you one: media coverage moved people to act. Your own knowledge adds another. The images travelled abroad and embarrassed the country. Option {opt3} sounds authoritative and is not how it happened. The instruction was never given, so it cannot be your evidence."
   },
   {
     "type": "question",
-    "level": "Evaluate",
-    "marks": "6 marks",
-    "q": "How useful is Source A to a historian judging what the counter-culture achieved?",
+    "level": "Comprehend",
+    "marks": "2 marks",
+    "q": "3.4.3  From Source A, quote TWO pieces of evidence that the injured Freedom Riders were not looked after at the hospital.",
     "options": [
-      "Useful on one weekend and its scale, and silent on anything that lasted",
-      "Not useful, since advertising is written to sell and cannot be trusted",
-      "Completely useful, because the festival is what the movement is remembered for",
-      "Useful only for the numbers, since press accounts of crowds are always unreliable"
+      "They received little aid for their injuries, and deacons rescued them",
+      "The mob attempted to trap them inside the bus as it was burning",
+      "A flaming bundle of rags was thrown through one of the bus windows",
+      "The police appeared only after fifteen minutes of violence had passed"
     ],
     "correct": 0,
-    "explanation": "Both halves. It is strong on that weekend and it cannot tell you what changed afterwards, which is what an achievement question is really asking. Option {opt1} discards advertising, and what organisers chose to promise is real evidence of what they thought people wanted."
+    "explanation": "A quote question wants the words on the page, and two of them, since it is two times one. Both halves of the right answer are printed in Source A for you. Options {opt1} and {opt2} describe the attack rather than the hospital. They tempt because they are the most vivid lines in the extract. Quote the wrong moment and the quotation is accurate and useless."
+  },
+  {
+    "type": "question",
+    "level": "Apply",
+    "marks": "2 marks",
+    "q": "3.4.4  In the context of the state of Alabama, explain the term segregationist.",
+    "options": [
+      "Someone who supported keeping black and white Americans apart by law",
+      "Someone who believed each American state should govern its own affairs",
+      "Someone who opposed the federal government sending soldiers into a state",
+      "Someone who wanted black Americans removed from the state altogether"
+    ],
+    "correct": 0,
+    "explanation": "Two marks, so name the belief and say what it applied to. Option {opt1} catches people, because states' rights was the argument segregationists used in public. The argument is not the belief. Define the cover story instead of the position and you have defined the wrong thing."
+  },
+  {
+    "type": "source",
+    "tag": "Source B",
+    "sourceLabel": "Source B",
+    "html": "<h2>The second source</h2><p><strong>First pass:</strong> what does he say the veterans want?</p><p><strong>Second pass:</strong> read it beside Source A. Both describe people who protested. What did each of them risk?</p>",
+    "source": {
+      "attr": "Source B: from the statement of John Kerry of Vietnam Veterans Against the War to the Committee on Foreign Relations of the United States Senate, 22 April 1971. The following day the veterans returned their medals at the Capitol. A United States government work.",
+      "body": "<p>I am not here as John Kerry. I am here as one member of the group of veterans in this country, and were it possible for all of them to sit at this table they would be here and have the same kind of testimony.</p><p>We could come back to this country, we could be quiet, we could hold our silence, we could not tell what went on in Vietnam. But we feel because of what threatens this country, that we have to speak out.</p><p>How do you ask a man to be the last man to die in Vietnam? How do you ask a man to be the last man to die for a mistake?</p>",
+      "toggleLabel": "Why a veteran, and not a student",
+      "toggle": "A student protester could be called ungrateful or naive. A veteran had already done what the government asked of him, and that is what made this testimony hard to answer. Notice that he opens by refusing to speak for himself alone. He is claiming to speak for a group, which is a claim a committee can test."
+    },
+    "terms": [
+      {
+        "term": "Testimony",
+        "def": "A statement given to a court or a committee, usually under oath. It is a public record, and the person giving it knows that."
+      },
+      {
+        "term": "Vietnam Veterans Against the War",
+        "def": "An organisation of former American soldiers who campaigned to end the war they had fought in."
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "level": "Comprehend",
+    "marks": "2 marks",
+    "q": "3.2.1 According to Source B, why do the veterans say they have to speak out?",
+    "options": [
+      "Because of what they believe threatens their country",
+      "Because the Senate had ordered them to give evidence in Washington",
+      "Because they wanted their medals returned to them by the government",
+      "Because no other group in the country was opposing the war at all"
+    ],
+    "correct": 0,
+    "explanation": "Lift it off the page. He says they could hold their silence, and that what threatens the country is why they will not. Option {opt1} turns a choice into an order. Option {opt2} reverses what the veterans did with their medals. Option {opt3} is false, and the movement was already large by 1971. On two marks you write the point and stop, because a marker has nothing extra to award."
+  },
+  {
+    "type": "question",
+    "level": "Apply",
+    "marks": "4 marks",
+    "q": "3.2.2 Using your own knowledge, give TWO reasons opposition to the war had grown by 1971.",
+    "options": [
+      "The casualties came home, and the draft made the war a personal question",
+      "The United States had already lost the war and had admitted as much in public",
+      "Congress had voted to end the war, and the American public then followed its lead",
+      "Television coverage of the war was banned, so rumours spread across the country"
+    ],
+    "correct": 0,
+    "explanation": "Own knowledge means what the source cannot give you. Opposition grew with the troop numbers and the casualties, and conscription turned a policy question into a personal one. Option {opt1} claims an admission that had not come. Option {opt2} inverts the order, since opinion moved first. Option {opt3} is the opposite of what happened, because the coverage was extensive. Two marks a point, so give both."
+  },
+  {
+    "type": "question",
+    "level": "Analyse",
+    "marks": "4 marks",
+    "q": "3.3 Compare Sources A and B. How far does Source B support Source A on what protestors faced?",
+    "options": [
+      "Both show protestors accepting a personal cost to make a case",
+      "Neither of the two sources mentions any risk to the people who protested",
+      "Source B contradicts Source A, because the veterans faced no danger at all",
+      "They cannot be compared, because they describe two entirely different decades"
+    ],
+    "correct": 0,
+    "explanation": "A comparison question wants the shared shape and then the difference. Both sets of protestors put themselves at risk to force an argument into public view. The difference is what they risked: the Riders faced violence on the road, the veterans faced being called disloyal by their own country. Option {opt1} ignores both. Option {opt2} is false on the record. Option {opt3} refuses the question, and a refusal earns you nothing. Name what they share, then name what separates them."
   },
   {
     "type": "content",
-    "tag": "The limit",
-    "html": "<h2>What Was Left</h2><p>By the end of <span class=\"key\">1970</span> the student protests had died down, partly because the American government had decided to withdraw from Vietnam.</p><p>Young people had earned new rights and new opportunities. In many countries the voting age was lowered from twenty-one to eighteen, so they now had a political voice. They also had more social freedom and greater say in their education.</p><p>So the movements that demanded things won measurable changes. The movement that refused instead changed what a generation thought was normal, which is harder to measure and not nothing.</p>",
-    "remember": "Demands won rights you can list. The refusal changed expectations, which is real and harder to count."
+    "tag": "The finale",
+    "html": "<h2>3.6  The last question. Eight marks.</h2><p><em>Using the sources and your own knowledge, explain the difficulties faced by people who protested in the United States in these years. Answer fully, and support your answer with THREE points.</em></p><p>Six of the twenty-eight marks are here, at two marks a point. This is the only question in the run that needs your own knowledge. Quote the source alone and you cap out in the middle band.</p><p>The next three questions build it with you, one move at a time.</p>",
+    "remember": "Sources AND own knowledge. A paragraph built only from the extract cannot reach the top marks, no matter how well you write it.",
+    "terms": [
+      {
+        "term": "Own knowledge",
+        "def": "Relevant fact you bring yourself, which is not in the sources. The last question is not finished without it."
+      }
+    ]
   },
   {
     "type": "question",
     "level": "Evaluate",
-    "marks": "4 marks",
-    "q": "How far did the counter-culture change American society?",
+    "marks": "Practice",
+    "q": "Which opening sentence does what the question asks?",
     "options": [
-      "Some way. It shifted what a generation expected, and it repealed no law",
-      "Completely. It ended deference to authority across American life",
-      "Not at all. It produced no legislation and therefore changed nothing",
-      "It cannot be judged, since attitudes leave no evidence a historian can use"
+      "The Riders met violence, official inaction and arrest at every stage",
+      "The Freedom Rides began on 4 May 1961 when eleven Riders left Washington",
+      "The Freedom Rides were among the bravest campaigns of the whole movement"
     ],
     "correct": 0,
-    "explanation": "How far wants you to name the limit. Option {opt1} claims a total change that never happened. Option {opt2} treats law as the only kind of change, which would make most of cultural history unwritable. Option {opt3} gives up on evidence that exists in what people wrote, wore and sang."
+    "explanation": "A topic sentence answers the question in one line, and the question asked about challenges. Option {opt1} starts the story instead. That is the usual way this paragraph goes wrong. It tells the story and never says what the story did. Option {opt2} praises the Riders without naming one challenge, so you have nothing to develop.",
+    "noSource": true
+  },
+  {
+    "type": "question",
+    "level": "Apply",
+    "marks": "Practice",
+    "q": "Which point counts as own knowledge here, beyond what Source A gives you?",
+    "options": [
+      "Photographers were beaten and their cameras destroyed at the bus terminals",
+      "The mob in Birmingham attacked with iron pipes and baseball bats",
+      "Attorney General Kennedy petitioned the Interstate Commerce Commission on 29 May",
+      "A mob threw a flaming bundle of rags through a bus window"
+    ],
+    "correct": 0,
+    "explanation": "Own knowledge means a relevant fact the source does not contain, and the marking notes list this one. Options {opt1}, {opt2} and {opt3} are all in Source A. That is exactly why they feel safe to write. Repeat the source and label it own knowledge and you have added nothing, because the extract is right there.",
+    "noSource": true
+  },
+  {
+    "type": "question",
+    "level": "Apply",
+    "mode": "order",
+    "marks": "Practice",
+    "q": "Put the four moves of the paragraph in order.",
+    "items": [
+      "Evidence from the sources: the mob, the burning bus, the missing police",
+      "A topic sentence naming the challenges the Riders met",
+      "Own knowledge: photographers beaten, images televised, Kennedy slow to act",
+      "A closing sentence tying the challenges to why the federal government moved"
+    ],
+    "answer": [
+      1,
+      0,
+      2,
+      3
+    ],
+    "explanation": "Topic sentence, source evidence, own knowledge, conclusion. That order matters, because this question asks for a shape as well as a set of facts. Put your own knowledge first and the paragraph reads as an essay ignoring the sources. The closing sentence is the one people drop, and dropping it keeps you out of the top marks.",
+    "noSource": true
   },
   {
     "type": "carousel",
-    "tag": "Fact recap",
-    "heading": "Every date and name so far",
+    "tag": "The run in full",
+    "heading": "What you were marked on",
     "cards": [
       {
-        "lead": "1967",
-        "body": "Thousands gather in San Francisco for a Summer of Love."
+        "lead": "3.1.1  Extract, 2",
+        "body": "How the Riders set out to challenge discrimination. Quote the purpose: testing whether facilities complied."
       },
       {
-        "lead": "August 1969",
-        "body": "A festival at Bethel, New York, billed as three days of peace and music. Planned for fifty thousand, far more arrive, and the fences come down."
+        "lead": "3.1.2  Extract, 2",
+        "body": "Define constitution. Two marks, so give the whole idea and not a fragment."
       },
       {
-        "lead": "Slogans",
-        "body": "Don't trust anyone over thirty. Make love, not war."
+        "lead": "3.1.4  Interpret, 4",
+        "body": "Why Kennedy acted. Two developed points, one from the source and one from your own knowledge."
       },
       {
-        "lead": "By 1970",
-        "body": "Student protest subsides. In many countries the voting age is lowered from twenty-one to eighteen."
+        "lead": "3.4.3  Extract, 2",
+        "body": "Two quotes on the hospital. Little aid for their injuries, and deacons sent to rescue them."
+      },
+      {
+        "lead": "3.4.4  Interpret, 2",
+        "body": "Define segregationist in Alabama. Name the belief, not the states' rights argument used to defend it."
+      },
+      {
+        "lead": "3.6  Evaluate, 8",
+        "body": "The paragraph. Topic sentence, source evidence, own knowledge, conclusion. Own knowledge is required."
       }
     ]
+  },
+  {
+    "type": "content",
+    "tag": "The four arguments",
+    "html": "<h2>What you built across the series</h2><p>Lesson 1: the law changed in 1954 and nothing else did. Every gain after it had to be forced from a system already told to move.</p><p>Lesson 2: Montgomery ran a boycott and a court case at once. The movement came out of it with a method and a leader.</p><p>Lesson 3: the Rides tested a ruling already won, and the answer was organised violence with the police arriving late by arrangement.</p><p>Lesson 4: the gains came when the pictures made inaction impossible. That is why the movement chose the places where the reaction would be worst.</p><p>Those four sentences are a whole answer to the exam question. You built them one lesson at a time.</p>"
+  },
+  {
+    "type": "content",
+    "tag": "Beyond the exam",
+    "html": "<h2>The habit, not the dates</h2><p>Four things you did in this unit have nothing to do with 1961. You asked where an account came from. You held two accounts against each other. You read an absence as evidence. You checked what a source was written to do before you decided what it could tell you.</p><p>Those four questions work on a news report, a company statement, a court judgement or a message from someone who wants something from you.</p><p>You practised those questions on 1961 because that is what the exam asks about. You will use them on things that have nothing to do with it.</p>"
+  },
+  {
+    "type": "content",
+    "tag": "Before you go",
+    "html": "<h2>Two things to do</h2><p>Take Knowledge Check 2. It asks the same eighteen facts as the check you did before Lesson 1. Each one comes at you from the other side. So it measures what stuck, not what you recognised.</p><p>Then sit this run again with a clock. Eighteen marks is about sixteen minutes at the pace Paper 2 expects. Doing it once slowly teaches the method; doing it once fast tells you whether you have it.</p>"
+  },
+  {
+    "type": "content",
+    "tag": "What this run leaves out",
+    "html": "<h2>Being straight with you about this run</h2><p>Section B of Paper 2 is ninety marks across a booklet of sources, and this run is eighteen. Two things were cut, and you should know what they were.</p><p>The photograph question is missing. It depends on a newspaper front page that cannot be published outside an exam paper. Your photograph practice is in Lessons 2 and 4 instead, and your reliability practice is in Lesson 3.</p><p>This run is also shorter than it should be, for the same reason. Everything in it is real: the questions, the allocations and the official answers. What could not be reproduced was left out rather than invented.</p>"
+  },
+  {
+    "type": "content",
+    "tag": "Next time",
+    "html": "<h2>Where this topic goes</h2><p>Question 3 in Paper 1 rotates across this whole topic rather than only the Freedom Rides. It has asked about the sit-ins, about Little Rock, and about the gains.</p><p>That is why the four lessons covered the whole strand and this run covered one part of it. If your paper asks about Montgomery or Selma instead, the method here is identical and the evidence is in Lessons 2 and 4.</p><p>The other half of this topic is the Black Power Movement, and it is examined as an essay rather than a source question.</p>"
   }
 ];
 
@@ -1327,13 +1479,6 @@ function renderStat(item){
 
 // Reopen strip: shown on a question that follows a source, so the learner
 // never has to tap Back to reread the extract.
-//
-// v2.1. Was: the strip offered LAST_SOURCE only. That is correct for a lesson
-// built on one source and wrong for a capstone, where the last question
-// asks for all of them and a learner on the closing screens could reach only
-// the most recent. Now every source seen so far in the file is reachable: a row
-// of tabs, and a swipeable track underneath. One source renders exactly as
-// before, so nothing in the existing corpus changes.
 function sourcePeek(item){
   if(item.noSource) return "";
   if(item.sourceRef && item.sourceRef.body){
@@ -1403,8 +1548,7 @@ function bindPeek(){
 function stripTags(h){ return String(h||"").replace(/<[^>]+>/g,""); }
 
 // ============ SOURCE ============
-// Every source rendered so far, in order, so any later question can reopen all
-// of them. LAST_SOURCE is kept as the final entry for anything still reading it.
+// The most recent source rendered, so any later question can reopen it in place.
 let SOURCES_SEEN = [];
 let LAST_SOURCE = null;
 
@@ -1637,6 +1781,7 @@ function render(){
     case "question": renderQuestion(item); break;
     default: renderContent(item); syncNav(false);
   }
+  bindPeek();   // the reopen strip's tabs and swipe rebind after every render
 }
 function syncNavCarousel(){
   nav.classList.remove("hidden");
@@ -1648,7 +1793,6 @@ function syncNavCarousel(){
 }
 
 function bindToggles(){
-  bindPeek();
   stage.querySelectorAll("[data-toggle]").forEach(b=>b.addEventListener("click",()=>{
     b.nextElementSibling.classList.toggle("open");
   }));
