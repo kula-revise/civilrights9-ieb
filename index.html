@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Three Days of Peace and Music | Civil Society Protests: Other Movements | Kula Revise</title>
+<style>
+  /* ============================================================
+     KULA SOURCE ENGINE v3: TOKEN CONTRACT
+     This file is fixed mechanism. Do not edit it per series.
+     A skin sets the THIRTEEN identity variables in the block below
+     and nothing else is required of it.
+
+     Two accents, split by job:
+       --a1  accent one: navigation, progress, emphasis, option letters,
+             the primary button, the story date. The "structure" accent.
+       --a2  accent two: anything the learner earned. Correct answers,
+             the running summary, breakdown bars, key facts, the last
+             story line. The "reward" accent.
+     Set --a1-rgb / --a2-rgb to the SAME colours as r,g,b (no #), because
+     the tints, washes and shadows are built from them.
+     ============================================================ */
+
+  :root {
+    /* ---- THE IDENTITY CONTRACT. A skin overrides these thirteen. ---- */
+    --sand:  #F2E9D9;   /* page background */
+    --paper: #FBF6EB;   /* cards */
+    --cut:   #FFFCF4;   /* insets, sources, carousels */
+    --ink:   #1B2A33;   /* body text */
+    --clay:  #8C4A2F;   /* stage tags, quiet labels */
+    --fade:  #7B7263;   /* muted text, captions */
+    --a1: #B4622D;   --a1-rgb: 180,98,45;
+    --a2: #1F6B58;   --a2-rgb: 31,107,88;
+    --serif: Georgia, 'Times New Roman', serif;
+    --sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --mono: ui-monospace, 'Cascadia Code', Consolas, 'Courier New', monospace;
+
+    /* ---- DERIVED TOKENS. A skin should not need to touch these. ----
+       They exist because the engine used to hardcode fourteen literal
+       colours, which is what made every glossary definition and every
+       source expander invisible in dark mode. Everything below now
+       tracks the identity variables above, so a skin that sets --fade
+       and --ink correctly gets a readable dark mode for free. ---- */
+    --muted:      var(--fade);          /* secondary body text: kt-def, toggle-body, disc-body, cover-line */
+    --hair:       rgba(0,0,0,0.12);     /* progress track, quiet rules */
+    --hair-strong:rgba(0,0,0,0.28);     /* dashed divider inside an expander */
+    --on-ink:     var(--paper);         /* text sitting on an --ink ground */
+    --on-a1:      var(--paper);         /* text sitting on an --a1 ground */
+    --on-a2:      var(--paper);         /* text sitting on an --a2 ground */
+    --ink-deep:   #12202a;              /* --ink one step darker, button hover */
+    --a2-deep:    #164C3F;              /* --a2 one step darker, button hover */
+    --ok-bg:      rgba(var(--a2-rgb),0.13);  /* a correct option, a placed item */
+    --no-bg:      rgba(var(--a1-rgb),0.13);   /* a wrong option, a misplaced item */
+    /* Skill chips. a = the entry-level skill (Comprehend, Stand, Recall).
+       b = the middle skill (Apply, Evidence, Understand). c = unassessed instinct.
+       The top skill (Evaluate, Weigh, Apply) sits on a solid accent ground. */
+    --chip-a-bg: rgba(var(--a1-rgb),0.16);  --chip-a-fg: var(--a1);
+    --chip-b-bg: rgba(var(--a2-rgb),0.16);  --chip-b-fg: #063E88;  /* one step darker than --a2: on its own tint the accent measured 4.17 */
+    --chip-c-bg: rgba(0,0,0,0.06);
+    --scrim:  rgba(16,22,32,0.5);       /* modal backdrop */
+    --inset:  rgba(255,255,255,0.4);    /* sort column well */
+
+    /* Legacy aliases. Older skins and the quiz shell reference these. */
+    --copper: var(--a1);
+    --malachite: var(--a2);
+  }
+
+  /* ---- DARK MODE TOKEN RE-POINT ---------------------------------------
+     The skin supplies body.dark values for the thirteen identity variables.
+     Everything derived re-points here, once, for every unit. This is the
+     engine-level fix for the three defects logged in MOBILE_FIXES_HANDOVER:
+     a skin no longer needs the patch block at all.
+     ------------------------------------------------------------------- */
+  body.dark {
+    --muted:      var(--fade);
+    --hair:       rgba(255,255,255,0.14);
+    --hair-strong:rgba(255,255,255,0.26);
+    --on-ink:     var(--sand);
+    --on-a1:      var(--sand);
+    --on-a2:      var(--sand);
+    --ink-deep:   var(--ink);
+    --a2-deep:    var(--a2);
+    --ok-bg:      rgba(var(--a2-rgb),0.20);
+    --no-bg:      rgba(var(--a1-rgb),0.18);
+    --chip-a-bg:  rgba(var(--a1-rgb),0.22);  --chip-a-fg: var(--ink);
+    --chip-b-bg:  rgba(var(--a2-rgb),0.22);  --chip-b-fg: var(--ink);
+    --chip-c-bg:  rgba(255,255,255,0.10);
+    --scrim:  rgba(0,0,0,0.62);
+    --inset:  rgba(255,255,255,0.05);
+  }
+  /* Key term chips keep a visible edge once the ground inverts. */
+  body.dark .kt-term { border-color: var(--hair-strong); }
+  body.dark .kt-term summary { color: var(--ink); }
+  body.dark .kt-label { border-top-color: var(--hair-strong); }
+
+  /* ---- MODE TOGGLE. Fixed bottom right, 44px minimum tap target. ---- */
+  .mode-toggle {
+    position: fixed; bottom: 0.9rem; right: 0.9rem; z-index: 40;
+    display: flex; align-items: center; gap: 0.4rem;
+    font-family: var(--sans); font-size: 0.66rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 0.62rem 0.75rem; min-height: 44px;
+    background: var(--paper); color: var(--fade);
+    border: 1px solid var(--hair-strong); cursor: pointer;
+    box-shadow: 0 2px 12px var(--scrim);
+  }
+  .mode-toggle:hover { color: var(--ink); border-color: var(--a1); }
+  .mode-toggle:focus-visible { outline: 2px solid var(--a1); outline-offset: 2px; }
+  .mode-toggle svg { width: 0.9rem; height: 0.9rem; fill: none; stroke: currentColor; stroke-width: 1.6; }
+  @media (max-width: 520px) {
+    .mode-toggle { min-height: 44px; padding: 0.62rem 0.7rem; font-size: 0.64rem; }
+  }
+  @media print { .mode-toggle { display: none; } }
+
+  /* ---- STICKY HEADER AT 360px --------------------------------------
+     .top-meta is a flex row and flex children default to min-width auto,
+     so at 360px the eyebrow and the step counter used to overlap. The
+     eyebrow now takes the free space and truncates rather than pushing
+     the counter off. Renders correctly at 375px and above either way,
+     which is why this was missed. 360 is common on mid-range Android.
+     ----------------------------------------------------------------- */
+  .top-meta { gap: 0.7rem; flex-wrap: nowrap; }
+  .top-meta > * { min-width: 0; }
+  .top-meta #lesson-tag, .top-meta .top-label {
+    flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .top-meta .top-count { flex: 0 0 auto; white-space: nowrap; }
+  @media (max-width: 380px) {
+    .top-meta { font-size: 0.62rem; letter-spacing: 0.09em; }
+  }
+
+/* US CIVIL RIGHTS: depot
+   Checked against the identity register before designing. Vietnam holds cream
+   paper and a serif on soft rounded cards. USA 1920s holds a near-black deco
+   ground with tracked-out uppercase. Black Power holds bone with heavy condensed
+   uppercase and offset shadows. Black Consciousness holds manila paper with
+   typewriter mono on every label. Angola holds cool slate with mono labels and
+   hairline squares. Congo holds Ore Seam's warm radial washes.
+
+   So this strand takes none of those. The metaphor is what the movement
+   physically was: distance covered in public. Buses across state lines, a
+   fourteen-foot counter, a road from Selma to Montgomery, and a ruling that had
+   to travel three years to reach one school door. Enamel wayfinding on asphalt:
+   sign plates, a lane rule, and mileposts. Graphite carries the structure and
+   rose carries anything the learner earned. Rose replaced the signage yellow
+   this palette started with, because yellow measured 2.7 against this ground and
+   the reward accent has to carry correct answers, key facts and the running
+   summary. Rose measures 4.6.
+
+   Signature moves, each chosen because nothing else on the register uses it:
+     - labels set as enamel sign plates in sentence case, not tracked-out caps
+     - a lane stripe with a dashed centre line down the left of every card
+     - sans for the history and serif reserved for documents, inverting Angola
+     - mono reserved for mark allocations only, never for labels
+     - accents in interstate green and signal amber, a pairing nobody holds */
+
+:root {
+  /* grounds and ink: warm concrete, not paper and not bone */
+  --sand:  #E7ECF3;   /* page background */
+  --paper: #FFFFFF;   /* cards */
+  --cut:   #DBE2EC;   /* insets, sources, carousels */
+  --ink:   #101620;   /* body text */
+  --clay:  #4A535F;   /* stage tags, quiet labels */
+  /* Muted text: captions, attributions, counters. The previous value measured 2.66
+     against the --cut inset, which is the darkest ground it sits on. */
+  --fade:  #57616E;   /* muted text, captions */
+  /* accents: interstate green for the settled line, signal amber for the contested one */
+  --a1: #B8002E;  --a1-rgb: 184,0,46;
+  --a2: #0854B4;  --a2-rgb: 8,84,180;
+  /* The two hover steps are derived, not identity. Left in the engine block
+     they kept the engine's bottle green against this skin's rose. */
+  --ink-deep: #0A0E15;
+  --a2-deep:  #063E88;
+  /* type: a grotesque carries the history, a serif is kept for documents only */
+  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --serif: Georgia, 'Times New Roman', serif;
+  --mono: ui-monospace, 'Cascadia Code', Consolas, 'Courier New', monospace;
+}
+
+/* Ground: a faint horizontal lane rule. Angola rules vertically, so this reads
+   across rather than down, and the page feels like road rather than paper. */
+body {
+  font-family: var(--sans) !important;
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 46px, rgba(16,22,32,0.030) 46px 47px) !important;
+}
+h1, h2, h3 { font-family: var(--sans) !important; letter-spacing: -0.012em !important; }
+
+/* Edges: a small radius, so neither the hard square of Angola and Black Power
+   nor the soft pill of Vietnam. Each card carries a lane stripe down its left
+   edge, green with a dashed centre line. That is the strand's signature. */
+.card, .source, .stat-wrap, .carousel, .kt {
+  border-radius: 3px !important;
+  border: 1px solid rgba(184,0,46,0.16) !important;
+  box-shadow: none !important;
+}
+.card {
+  border-left: 7px solid var(--a1) !important;
+  background-image:
+    repeating-linear-gradient(180deg,
+      transparent 0 14px,
+      rgba(255,255,255,0.92) 14px 26px) !important;
+  background-size: 3px 100% !important;
+  background-position: -5px 0 !important;
+  background-repeat: no-repeat !important;
+}
+
+/* Labels are enamel sign plates: a solid green field, white text, sentence case
+   and tight tracking. Deliberately not mono and not tracked-out caps, because
+   those are Angola's and Black Consciousness's signatures respectively. */
+.stage-tag, .kt-label, .expl-label, .pop-label, .results-eyebrow, .cover-eyebrow {
+  font-family: var(--sans) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.005em !important;
+  text-transform: none !important;
+}
+.stage-tag, .kt-label, .expl-label, .pop-label {
+  background: var(--a1) !important;
+  color: #FFFFFF !important;
+  border-radius: 3px !important;
+  padding: 0.24rem 0.6rem !important;
+  display: inline-block;
+}
+.cover-eyebrow, .results-eyebrow, .top-meta {
+  color: var(--clay) !important;
+  letter-spacing: 0.02em !important;
+}
+/* Mark allocations are the one place mono appears. */
+.marks { font-family: var(--mono) !important; letter-spacing: 0.02em !important; color: var(--a2) !important; }
+
+/* Sources invert the world around them. Everything else is sans on a rounded
+   card; a source is serif, squared and fully ruled, so it reads as a document
+   handed to the learner rather than as more of the lesson. */
+.source {
+  background: var(--cut) !important;
+  border: 1.5px solid rgba(16,22,32,0.30) !important;
+  border-left-width: 1.5px !important;
+  border-radius: 0 !important;
+  padding: 1.2rem 1.25rem !important;
+}
+.source, .source p { font-family: var(--serif) !important; }
+.source-attr {
+  font-family: var(--sans) !important;
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em !important;
+  text-transform: none !important;
+  color: var(--a1) !important;
+  background: rgba(184,0,46,0.09);
+  border-radius: 3px;
+  padding: 0.5rem 0.65rem;
+  margin-bottom: 0.95rem;
+}
+
+/* Cover flourish: a lane rule with its dashes, replacing the v2 arc and fan. */
+.header-block::before, .cover-arc, .cover-fan { display: none !important; }
+.rule, .cover-rule, .flourish {
+  width: 150px !important;
+  height: 6px !important;
+  border-radius: 1px !important;
+  background-image:
+    repeating-linear-gradient(90deg,
+      var(--a1) 0 16px, rgba(231,236,243,0.95) 16px 26px) !important;
+  background-color: var(--a1) !important;
+}
+.cover-line { font-style: normal !important; color: var(--clay) !important; }
+
+/* Chips keep the sign-plate radius rather than Angola's square. */
+.chip { border-radius: 3px !important; font-size: 0.62rem !important; letter-spacing: 0.02em !important; }
+
+/* Begin button: a solid enamel plate, so the cover reads as signage. */
+.btn-begin {
+  background: var(--a1) !important;
+  color: #FFFFFF !important;
+  border: 2px solid var(--a1) !important;
+  border-radius: 3px !important;
+}
+.btn-begin:hover { background: #8A0022 !important; border-color: #8A0022 !important; }
+
+/* Stat cards read as mileposts: the figure large, the label beneath it. */
+.stat-num { color: var(--a1) !important; font-family: var(--sans) !important; font-weight: 700 !important; }
+.stat-label { color: var(--clay) !important; letter-spacing: 0.01em !important; }
+
+/* The engine sets .story-num and body text in the serif. In Milepost the serif
+   is reserved for documents, so the marker, the cover title and the question
+   stems come back to the grotesque. A source is then the only serif on screen. */
+.story-num, .cover-title, .q-text, .story-line, .cover-line {
+  font-family: var(--sans) !important;
+}
+.story-num { letter-spacing: -0.03em !important; font-weight: 700 !important; }
+.story-rule {
+  height: 5px !important;
+  background: repeating-linear-gradient(90deg,
+    var(--a1) 0 14px, rgba(0,0,0,0) 14px 24px) !important;
+  opacity: 0.55;
+}
+.source, .source p, .source li { font-family: var(--serif) !important; }
+
+
+/* ---- DARK MODE -------------------------------------------------------------
+   The failure mode logged against dark identities is a washed-out screen in
+   sunlight, so the light ground above is the default and this is the inversion.
+   Concrete goes to asphalt and the enamel colours brighten rather than dim. */
+body.dark {
+  --sand:  #080C16;
+  --paper: #121926;
+  --cut:   #1B2433;
+  --ink:   #EAF0F9;
+  --clay:  #97A3B4;
+  --fade:  #8A97A8;
+  --a1: #FF4D6D;  --a1-rgb: 255,77,109;
+  --a2: #58B6FF;  --a2-rgb: 88,182,255;
+  /* On a dark ground a hover step goes lighter, not deeper. */
+  --ink-deep: #FFFFFF;
+  --a2-deep:  #8ACCFF;
+}
+body.dark { background-image:
+  repeating-linear-gradient(0deg, transparent 0 46px, rgba(234,240,249,0.038) 46px 47px) !important; }
+body.dark .card, body.dark .source, body.dark .stat-wrap,
+body.dark .carousel, body.dark .kt { border-color: rgba(255,77,109,0.26) !important; }
+body.dark .card { border-left-color: var(--a1) !important; background-image: none !important; }
+body.dark .source { border-color: rgba(234,240,249,0.30) !important; }
+body.dark .stage-tag, body.dark .kt-label,
+body.dark .expl-label, body.dark .pop-label { background: rgba(255,77,109,0.22) !important; color: #FFC9D3 !important; }
+body.dark .source-attr { background: rgba(255,77,109,0.16) !important; color: #FFC9D3 !important; }
+body.dark .btn-begin { background: var(--a1) !important; border-color: var(--a1) !important; color: #080C16 !important; }
+body.dark .btn-begin:hover { background: #FF7A93 !important; border-color: #FF7A93 !important; }
+body.dark .mode-toggle { background: var(--paper); border-color: rgba(234,240,249,0.24); }
+body.dark .rule, body.dark .cover-rule, body.dark .flourish {
+  background-image: repeating-linear-gradient(90deg,
+    var(--a1) 0 16px, rgba(18,25,38,0.95) 16px 26px) !important;
+}
+
+/* Tier and level chips carry light grounds in the base engine and glare when
+   the ground inverts, so each gets a dark ground of its own. */
+body.dark .chip { background: rgba(255,77,109,0.16) !important; color: #FFC9D3 !important; }
+body.dark .chip-recall,     body.dark .chip-a   { background: rgba(88,182,255,0.20) !important; color: #FFC9D3 !important; }
+body.dark .chip-understand, body.dark .chip-b { background: rgba(255,77,109,0.20) !important; color: #BFDFFF !important; }
+body.dark .chip-apply,      body.dark .chip-d  { background: rgba(234,240,249,0.16) !important; color: #EAF0F9 !important; }
+body.dark .option-btn, body.dark .opt-btn { border-color: rgba(234,240,249,0.20) !important; }
+
+
+/* ---- DARK MODE STATE COLOURS -----------------------------------------------
+   The base variables flip, but several states carry hardcoded light values.
+   Left alone they produce pale text on pale grounds. */
+body.dark .option-btn.correct .opt-text,
+body.dark .option-btn.wrong   .opt-text { color: var(--ink) !important; }
+body.dark .option-btn.correct .opt-letter { color: #9CCDFF !important; }
+body.dark .option-btn.wrong   .opt-letter { color: #FF9DB0 !important; }
+body.dark .opt-mark { color: var(--ink) !important; }
+
+body.dark .primary-btn {
+  background: var(--cut) !important;
+  border: 1px solid rgba(255,77,109,0.40) !important;
+  color: var(--ink) !important;
+}
+body.dark .primary-btn:hover { background: #1F2A3A !important; }
+body.dark .primary-btn .btn-title { color: var(--ink) !important; }
+body.dark .primary-btn .btn-sub,
+body.dark .primary-btn .btn-arrow { color: var(--clay) !important; opacity: 1 !important; }
+
+body.dark .section-btn { border-color: rgba(234,240,249,0.18) !important; color: var(--ink) !important; }
+body.dark .section-btn:hover { background: var(--cut) !important; border-color: var(--a1) !important; }
+body.dark .primary-btn-small { background: var(--a1) !important; color: #080C16 !important; }
+body.dark .primary-btn-small:hover:not(:disabled) { background: #FF7A93 !important; }
+body.dark .secondary-btn { border-color: rgba(234,240,249,0.30) !important; color: var(--ink) !important; }
+body.dark .secondary-btn:hover:not(:disabled) { background: var(--cut) !important; }
+
+body.dark .explanation { background: var(--cut) !important; border-color: rgba(255,77,109,0.28) !important; }
+body.dark .expl-text { color: var(--ink) !important; }
+body.dark .quiz-foot a, body.dark .quiz-foot { color: var(--clay) !important; }
+
+/* The lesson engine uses .option where the quiz uses .option-btn, so the state
+   overrides have to name both or half the product stays broken. */
+body.dark .option { background: var(--cut) !important; border-color: rgba(234,240,249,0.18) !important; color: var(--ink) !important; }
+body.dark .option.selected { background: rgba(88,182,255,0.14) !important; border-color: #58B6FF !important; }
+body.dark .option.correct .opt-text,
+body.dark .option.wrong   .opt-text { color: var(--ink) !important; }
+body.dark .option.correct .opt-letter { color: #9CCDFF !important; }
+body.dark .option.wrong   .opt-letter { color: #FF9DB0 !important; }
+
+
+/* The toggle is fixed bottom right and lands on the Continue button on a short
+   viewport. Lift it clear and give the page room underneath. */
+.mode-toggle { bottom: 1rem; right: 1rem; border-radius: 3px !important; }
+body { padding-bottom: 4.5rem !important; }
+@media (max-width: 520px) {
+  .mode-toggle { bottom: 0.7rem; right: 0.7rem; padding: 0.45rem 0.6rem; font-size: 0.6rem; }
+  .card { border-left-width: 5px !important; }
+}
+
+
+/* Figures. Captions read left, not centred, and at a measure that holds. */
+.figure figcaption {
+  text-align: left !important;
+  max-width: 34rem;
+  margin-left: auto; margin-right: auto;
+  font-size: 0.84rem !important;
+  color: var(--clay) !important;
+  border-top: 1px solid rgba(184,0,46,0.20);
+  padding-top: 0.6rem;
+}
+.figure img { border: 1px solid rgba(184,0,46,0.28) !important; border-radius: 2px !important; }
+body.dark .figure img { border-color: rgba(255,77,109,0.30) !important; }
+body.dark .figure figcaption { border-top-color: rgba(255,77,109,0.24); }
+body.dark .figure img { filter: brightness(0.9) contrast(1.02); }
+
+
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(90deg, rgba(var(--a1-rgb),0.05) 0 1px, transparent 1px 5px),
+      radial-gradient(ellipse at top right, rgba(var(--a1-rgb),0.10) 0%, transparent 58%),
+      radial-gradient(ellipse at bottom left, rgba(var(--a2-rgb),0.09) 0%, transparent 58%),
+      var(--sand);
+    padding: 1.6rem 1rem 3rem;
+    font-family: var(--serif);
+    color: var(--ink); line-height: 1.6; -webkit-text-size-adjust: 100%;
+    -webkit-user-select: none; user-select: none;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+  .top-bar { margin-bottom: 1.6rem; }
+  .top-meta { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--sans); font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--a2); font-weight: 700; margin-bottom: 0.55rem; gap: 0.7rem; flex-wrap: nowrap; }
+  /* Flex children default to min-width auto, so at 360px the eyebrow and the
+     step counter used to overlap. The eyebrow takes the free space and
+     truncates instead of pushing the counter off the row. */
+  .top-meta > * { min-width: 0; }
+  .top-meta #lesson-tag, .top-meta .top-label { flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .top-meta .top-count { flex: 0 0 auto; white-space: nowrap; }
+  @media (max-width: 380px) { .top-meta { font-size: 0.62rem; letter-spacing: 0.09em; } }
+  .top-count { color: var(--fade); font-weight: 500; letter-spacing: 0.04em; text-transform: none; }
+  .track { height: 3px; background: var(--hair); overflow: hidden; }
+  .fill { height: 100%; background: var(--a1); transition: width 0.35s ease; width: 0%; }
+
+  /* Cover */
+  .cover { text-align: center; padding: 1.2rem 0 1rem; }
+  .cover-eyebrow { font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--clay); font-weight: 700; margin-bottom: 1.4rem; }
+  .cover-title { font-size: clamp(2.3rem,7vw,3.6rem); font-weight: 800; line-height: 1.03; letter-spacing: -0.025em; margin-bottom: 1.3rem; }
+  .flourish { width: 92px; height: 9px; margin: 0 auto 1.6rem;
+    background:
+      radial-gradient(circle at 9px 4.5px, var(--a1) 0 4px, transparent 4.5px),
+      radial-gradient(circle at 46px 4.5px, var(--a1) 0 4px, transparent 4.5px),
+      radial-gradient(circle at 83px 4.5px, var(--a1) 0 4px, transparent 4.5px); }
+  .cover-line { font-size: 1.16rem; line-height: 1.7; color: var(--muted); font-style: italic; max-width: 30rem; margin: 0 auto 2rem; min-height: 5.5rem; }
+  .cover-line span { opacity: 0; transition: opacity 0.5s ease; }
+  .cover-line span.vis { opacity: 1; }
+  .cover-time { font-family: var(--sans); font-size: 0.8rem; color: var(--fade); margin-top: 1.4rem; letter-spacing: 0.02em; }
+  .btn-begin { font-family: var(--sans); display: inline-flex; align-items: center; gap: 0.8rem; padding: 1.05rem 2.2rem; background: var(--ink); color: var(--on-ink); border: none; cursor: pointer; font-size: 1.12rem; font-weight: 700; }
+  .btn-begin:hover { background: var(--ink-deep); }
+  /* The arrow takes the button's own text colour. Painted --a1 it disappears on
+     any skin that also makes the Begin button --a1 or close to it. */
+  .btn-begin .sa { color: currentColor; font-size: 1.3rem; }
+  .skip-link { display: block; margin: 1.6rem auto 0; background: transparent; border: none; color: var(--fade); font-family: var(--sans); font-size: 0.84rem; cursor: pointer; text-decoration: underline; }
+
+  /* Story hook */
+  .story { padding: 0.6rem 0 0.4rem; min-height: 60vh; display: flex; flex-direction: column; justify-content: center; }
+  .story-num { font-family: var(--serif); font-size: clamp(2.6rem,9vw,4rem); font-weight: 800; color: var(--a1); line-height: 1; letter-spacing: -0.02em; }
+  .story-unit { font-family: var(--sans); font-size: 0.82rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fade); font-weight: 700; margin-top: 0.5rem; }
+  .story-rule { width: 100%; height: 1px; background: var(--hair-strong); margin: 1.4rem 0 1.6rem; }
+  .story-line { font-size: 1.24rem; line-height: 1.66; margin-bottom: 1.05rem; opacity: 0; transform: translateY(6px); transition: opacity 0.55s ease, transform 0.55s ease; }
+  .story-line.vis { opacity: 1; transform: translateY(0); }
+  .story-line.last { color: var(--a2); font-style: italic; font-weight: 600; }
+
+  /* Content cards */
+  .card { background: var(--paper); border: 1px solid var(--hair); border-left: 5px solid var(--a1); padding: 1.7rem 1.5rem; margin-bottom: 1.3rem; }
+  .stage-tag { font-family: var(--sans); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--clay); font-weight: 700; margin-bottom: 0.9rem; }
+  .card h2 { font-family: var(--sans); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 0.9rem; }
+  .card p { font-size: 1.04rem; line-height: 1.74; margin-bottom: 0.9rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .key { color: var(--a2); font-weight: 700; }        /* one emphasis colour, body face kept */
+  .card strong { color: var(--a2); font-weight: 700; }
+  .pull { border-left: 4px solid var(--a2); padding: 0.15rem 0 0.15rem 1rem; font-weight: 600; color: var(--ink); margin: 1.15rem 0; font-style: italic; }
+  .figure { margin: 1rem 0 0.3rem; }
+  .figure img { display: block; height: auto; border: 1px solid var(--hair-strong); margin: 0 auto; }
+  .figure.wide img { width: 100%; max-width: 460px; }
+  .figure.portrait img { width: 100%; max-width: 320px; }
+  .figure figcaption { font-family: var(--serif); font-size: 0.82rem; color: var(--fade); margin-top: 0.5rem; line-height: 1.55; text-align: center; }
+
+  /* Carousel */
+  .car-wrap { margin: 0.4rem 0 0; }
+  .car-prompt { font-family: var(--sans); font-size: 0.82rem; color: var(--a2); font-weight: 700; margin-bottom: 0.8rem; }
+  .car-frame { background: var(--cut); border: 1px solid var(--hair); border-top: 3px solid var(--a1); padding: 1.4rem 1.35rem; min-height: 8.5rem; display: flex; align-items: center; }
+  .car-card { font-size: 1.06rem; line-height: 1.7; width: 100%; }
+  .car-card .cc-lead { font-family: var(--sans); font-weight: 700; font-size: 0.95rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--clay); display: block; margin-bottom: 0.5rem; }
+  .car-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 0.9rem; gap: 1rem; }
+  .car-dots { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .car-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--hair-strong); }
+  .car-dot.read { background: var(--a2); }
+  .car-dot.here { outline: 2px solid var(--a1); outline-offset: 2px; }
+  .car-count { font-family: var(--sans); font-size: 0.78rem; color: var(--fade); font-weight: 600; }
+  .car-btns { display: flex; gap: 0.5rem; }
+  .car-btn { font-family: var(--sans); width: 2.4rem; height: 2.4rem; background: var(--paper); border: 1px solid var(--hair-strong); color: var(--ink); font-size: 1.1rem; cursor: pointer; }
+  .car-btn:disabled { opacity: 0.32; cursor: not-allowed; }
+
+  /* Stat strip */
+  .stat-strip { display: grid; grid-template-columns: repeat(auto-fit,minmax(120px,1fr)); gap: 0.8rem; margin: 0.5rem 0 0.2rem; }
+  .stat { background: var(--cut); border: 1px solid var(--hair); border-top: 3px solid var(--a2); padding: 1.1rem 0.7rem; text-align: center; }
+  .stat-num { font-family: var(--serif); font-size: 2rem; font-weight: 800; color: var(--a2); line-height: 1; letter-spacing: -0.02em; }
+  .stat-label { font-family: var(--sans); font-size: 0.72rem; letter-spacing: 0.06em; color: var(--fade); margin-top: 0.5rem; line-height: 1.4; }
+
+  /* Key terms + memory boxes (collapsed) */
+  /* Key terms strip: label + individual expandable chips */
+  .kt { margin-top: 1.3rem; }
+  .kt-label { font-family: var(--sans); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--a1); padding-top: 0.85rem; border-top: 1px dashed var(--hair-strong); }
+  .kt-row { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 0.85rem; }
+  .kt-term { border: 1px solid var(--hair-strong); background: transparent; }
+  .kt-term summary { font-family: var(--sans); font-size: 0.92rem; font-weight: 600; color: var(--ink); cursor: pointer; list-style: none; padding: 0.55rem 0.85rem; display: inline-flex; align-items: center; gap: 0.5rem; }
+  .kt-term summary::-webkit-details-marker { display: none; }
+  .kt-term summary::after { content: "+"; color: var(--a1); font-weight: 800; font-size: 1.05rem; }
+  .kt-term[open] { display: block; width: 100%; }
+  .kt-term[open] summary::after { content: "\2212"; }
+  .kt-def { font-size: 0.94rem; line-height: 1.62; color: var(--muted); padding: 0 0.85rem 0.75rem; }
+
+  /* Remember box (collapsed) */
+  .remember { margin-top: 0.9rem; border-top: 1px dashed var(--hair-strong); padding-top: 0.7rem; }
+  .remember summary { font-family: var(--sans); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.04em; color: var(--a1); cursor: pointer; list-style: none; }
+  .remember summary::-webkit-details-marker { display: none; }
+  .remember summary::before { content: "+ "; font-weight: 800; }
+  .remember[open] summary::before { content: "\2212 "; }
+  .remember .disc-body { font-size: 0.96rem; line-height: 1.68; color: var(--muted); margin-top: 0.6rem; background: rgba(var(--a2-rgb),0.06); border-left: 3px solid var(--a2); padding: 0.7rem 0.9rem; }
+
+  /* Sources */
+  .source { position: relative; background: var(--cut); border: 1px solid var(--hair); border-top: 3px solid var(--a2); box-shadow: 6px 6px 0 rgba(var(--a2-rgb),0.13); padding: 1.2rem 1.3rem; margin: 1.15rem 0 1.6rem; }
+  .source-attr { font-family: var(--sans); font-size: 0.8rem; color: var(--clay); font-weight: 600; margin-bottom: 0.75rem; line-height: 1.5; }
+  .source-body { font-size: 1.02rem; line-height: 1.74; }
+  /* --a2 measured 4.18 on the light source ground, so light takes one step darker.
+     Dark keeps --a2, which is already a light rose and reads correctly there. */
+  .source-body em { color: #063E88; font-style: italic; }
+  body.dark .source-body em { color: var(--a2); }
+  .toggle-btn { font-family: var(--sans); background: transparent; border: none; color: var(--a1); cursor: pointer; font-size: 0.88rem; font-weight: 600; text-decoration: underline; padding: 0.7rem 0 0; }
+  .toggle-body { display: none; margin-top: 0.7rem; padding-top: 0.7rem; border-top: 1px dashed var(--hair-strong); font-size: 0.94rem; color: var(--muted); line-height: 1.66; }
+  .toggle-body.open { display: block; }
+
+  /* Questions */
+  .q-text { font-size: 1.16rem; line-height: 1.5; font-weight: 600; margin-bottom: 1.2rem; }
+  .options { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.2rem; }
+  .option { display: flex; align-items: flex-start; gap: 0.85rem; padding: 1rem 1.05rem; background: var(--sand); border: 1px solid var(--hair); cursor: pointer; font-family: var(--serif); text-align: left; font-size: 0.99rem; line-height: 1.55; color: var(--ink); width: 100%; }
+  .option:hover:not(:disabled) { background: var(--cut); border-color: var(--a1); }
+  .option:disabled { cursor: default; }
+  .option.selected { background: var(--cut); border-color: var(--a1); border-width: 2px; padding: 0.94rem 0.99rem; }
+  .option.correct { background: var(--ok-bg); border-color: var(--a2); border-width: 2px; padding: 0.94rem 0.99rem; }
+  .option.wrong { background: var(--no-bg); border-color: var(--clay); border-width: 2px; padding: 0.94rem 0.99rem; }
+  /* The dimmed state fell below readable contrast at 360px. One rule per mode,
+     and nothing later in the file competes with it. */
+  .option.dimmed, .option-btn.dimmed { opacity: 0.82; }
+  body.dark .option.dimmed, body.dark .option-btn.dimmed { opacity: 0.86; }
+  .opt-letter { font-family: var(--serif); font-weight: 800; color: var(--a1); min-width: 1.1rem; }
+  .opt-text { flex: 1; }
+  .opt-mark { font-weight: 700; font-size: 1.1rem; }
+  .explanation { background: var(--cut); border: 1px solid var(--hair); border-left: 5px solid var(--a2); padding: 1.15rem 1.2rem; }
+  .expl-label { font-family: var(--sans); font-size: 0.66rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--a2); font-weight: 700; margin-bottom: 0.5rem; }
+  .expl-text { line-height: 1.7; font-size: 0.96rem; }
+  .chip { display: inline-block; font-family: var(--sans); padding: 0.22rem 0.65rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+  .chip-a { background: var(--chip-a-bg); color: var(--chip-a-fg); }
+  .chip-b { background: var(--chip-a-bg); color: var(--chip-a-fg); }
+  .chip-c { background: var(--a2); color: var(--on-a2); }
+  .chip-a { background: var(--chip-a-bg); color: var(--chip-a-fg); }
+  .chip-b { background: var(--chip-b-bg); color: var(--chip-b-fg); }
+  .chip-d { background: var(--a2); color: var(--on-a2); }
+  .chip-instinct { background: var(--chip-c-bg); color: var(--clay); }
+
+  /* Reopen the source from inside a question */
+  .srcpeek { border: 1px solid var(--clay); background: rgba(var(--a1-rgb),0.07); margin: 0 0 1rem; }
+  .srcpeek summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 0.7rem; padding: 0.8rem 0.85rem; color: var(--clay); }
+  .srcpeek summary::-webkit-details-marker { display: none; }
+  .srcpeek .chev { flex: 0 0 auto; transition: transform 0.18s ease; }
+  .srcpeek[open] .chev { transform: rotate(90deg); }
+  .srcpeek .peek-cue { font-family: var(--sans); font-size: 0.92rem; font-weight: 700; line-height: 1.25; color: var(--ink); }
+  .srcpeek .peek-who { display: block; font-family: var(--sans); font-size: 0.66rem; letter-spacing: 0.09em; text-transform: uppercase; font-weight: 400; color: var(--muted); margin-top: 0.25rem; }
+  .srcpeek[open] .peek-cue { color: var(--muted); }
+  .srcpeek .peek-body { padding: 0 0.85rem 0.85rem; font-size: 0.94rem; line-height: 1.62; border-top: 1px solid var(--rule); margin: 0 0.85rem; padding-left: 0; padding-right: 0; }
+  .srcpeek .peek-body p { margin: 0.7rem 0 0; }
+
+  /* v2.1 multi-source reopen. Tabs plus a swipeable track, so every source in
+     the file is reachable from any question. Absent on a single-source lesson,
+     which renders exactly as it did before. */
+  .srcpeek.multi .peek-body { padding-bottom: 0.5rem; }
+  .peek-tabs { display: flex; gap: 0.4rem; overflow-x: auto; padding: 0.7rem 0 0.6rem;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .peek-tabs::-webkit-scrollbar { display: none; }
+  .peek-tab { flex: 0 0 auto; min-height: 40px; padding: 0.45rem 0.85rem;
+    font-family: var(--sans); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; cursor: pointer;
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--rule); border-radius: 0; }
+  .peek-tab.on { background: var(--a1); color: var(--on-a1); border-color: var(--a1); }
+  .peek-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none; gap: 0; }
+  .peek-track::-webkit-scrollbar { display: none; }
+  .peek-slide { flex: 0 0 100%; scroll-snap-align: start; padding-right: 0.1rem; }
+  .peek-slide .peek-attr { font-family: var(--sans); font-size: 0.66rem; font-weight: 700;
+    line-height: 1.45; color: var(--muted); padding-bottom: 0.5rem; margin-bottom: 0.6rem;
+    border-bottom: 1px solid var(--rule); }
+  .peek-slide p { margin: 0.7rem 0 0; }
+  .srcpeek.multi::after { content: "Swipe, or choose a source above."; display: block;
+    font-family: var(--sans); font-size: 0.66rem; letter-spacing: 0.06em; color: var(--muted);
+    padding: 0.55rem 0 0.2rem; }
+  .srcpeek.multi:not([open])::after { display: none; }
+
+  .marks { font-family: var(--mono, var(--sans)); font-size: 0.68rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--a1); font-weight: 700; margin-left: 0.7rem; }
+  .q-meta { margin-bottom: 0.9rem; }
+
+  /* order + sort interactions */
+  .inter { margin: 0.4rem 0 1rem; }
+  .inter-pool { display: flex; flex-direction: column; gap: 0.5rem; }
+  .inter-item { font-family: var(--serif); text-align: left; padding: 0.85rem 1rem; background: var(--sand); border: 1px solid var(--hair); cursor: pointer; font-size: 0.97rem; line-height: 1.5; color: var(--ink); display: flex; gap: 0.7rem; align-items: baseline; }
+  .inter-item:hover:not(:disabled) { border-color: var(--a1); background: var(--cut); }
+  .inter-item .rank { font-family: var(--sans); font-weight: 800; color: var(--a1); min-width: 1.4rem; }
+  .inter-placed { background: var(--cut); border-color: var(--a2); }
+  .inter-item.ok { background: var(--ok-bg); border-color: var(--a2); }
+  .inter-item.no { background: var(--no-bg); border-color: var(--clay); }
+  .sort-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+  .sort-col { background: var(--inset); border: 1px dashed var(--hair-strong); padding: 0.7rem; min-height: 4rem; }
+  .sort-col h4 { font-family: var(--sans); font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--clay); font-weight: 700; margin-bottom: 0.6rem; text-align: center; }
+  .sort-btns { display: flex; gap: 0.4rem; margin-top: 0.5rem; }
+  .sort-place { font-family: var(--sans); flex: 1; font-size: 0.78rem; font-weight: 700; padding: 0.4rem; background: var(--paper); border: 1px solid var(--hair-strong); cursor: pointer; color: var(--ink); }
+
+  /* Running summary */
+
+  /* Popup */
+
+  /* Nav */
+  .nav { display: flex; justify-content: space-between; gap: 0.8rem; margin-top: 1rem; }
+  .btn-secondary { font-family: var(--sans); padding: 0.8rem 1.2rem; background: transparent; border: 1px solid var(--hair-strong); color: var(--ink); font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+  .btn-secondary:hover:not(:disabled) { background: var(--paper); }
+  .btn-primary { font-family: var(--sans); padding: 0.85rem 1.5rem; background: var(--a2); border: none; color: var(--on-a2); font-size: 0.95rem; cursor: pointer; font-weight: 700; }
+  .btn-primary:hover:not(:disabled) { background: var(--a2-deep); }
+  .btn-primary:disabled { opacity: 0.34; cursor: not-allowed; }
+
+  /* Results */
+  .results-head { text-align: center; margin-bottom: 1.8rem; }
+  .results-eyebrow { font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--clay); font-weight: 700; margin-bottom: 0.8rem; }
+  .results-title { font-family: var(--sans); font-size: clamp(1.9rem,5.5vw,2.7rem); font-weight: 800; letter-spacing: -0.02em; }
+  .score-row { display: grid; grid-template-columns: repeat(auto-fit,minmax(130px,1fr)); gap: 0.9rem; margin-bottom: 1.4rem; }
+  .score-block { background: var(--paper); border: 1px solid var(--hair); border-top: 4px solid var(--a1); padding: 1.3rem 0.8rem; text-align: center; }
+  .score-num { font-family: var(--serif); font-size: 2.6rem; font-weight: 800; color: var(--ink); line-height: 1; letter-spacing: -0.03em; }
+  .score-den { font-family: var(--serif); font-size: 1.1rem; color: var(--fade); font-weight: 500; }
+  .score-word { font-family: var(--serif); font-size: 1.3rem; font-weight: 800; color: var(--a2); line-height: 2; }
+  .score-label { font-family: var(--sans); font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fade); margin-top: 0.5rem; font-weight: 700; }
+  .grade-desc { text-align: center; margin-bottom: 1.6rem; padding: 0 0.5rem; line-height: 1.66; }
+  .breakdown { background: var(--paper); border: 1px solid var(--hair); padding: 1.3rem; margin-bottom: 1.4rem; }
+  .breakdown-label { font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--a2); font-weight: 700; margin-bottom: 1rem; text-align: center; }
+  .bd-row { display: grid; grid-template-columns: 1fr 110px 46px; gap: 0.7rem; align-items: center; margin-bottom: 0.7rem; font-family: var(--serif); font-size: 0.9rem; }
+  .bd-name { font-weight: 600; }
+  .bd-bar { height: 9px; background: var(--hair); overflow: hidden; }
+  .bd-fill { height: 100%; background: var(--a2); }
+  .bd-score { color: var(--fade); text-align: right; font-weight: 700; }
+  .results-actions { display: flex; gap: 0.8rem; margin-top: 1.6rem; }
+  .results-actions button { flex: 1; }
+  .hidden { display: none !important; }
+
+
+/* ============================================================
+   EARNED STATES READ GREEN
+   Applied identically across this strand, and matching the
+   Cold War and Angola builds.
+
+   This skin gives rose the job of "anything the learner
+   earned". Green now takes the narrow part of that job, the
+   correct answer itself, and rose keeps the rest: the marks,
+   the key facts, the running summary, the primary button.
+   Green is a new token rather than a repointed --a2, because
+   repointing would turn the whole strand green and lose the
+   graphite against rose the identity is built on. Rose sits at
+   hue 343 and the green at 132, so there is no risk of the two
+   reading as one colour.
+
+   The correct option fills solid so it reads as the answer from
+   across the room. The asymmetry is deliberate: the option you
+   got right is loud, the one you picked and got wrong stays a
+   quiet tint with a firm border, because a learner who is
+   already wrong does not need it shouted at them.
+
+   Measured on this skin's own grounds:
+     light  paper text on #2A6335      6.74 : 1
+            the fill against the page  5.96 : 1
+     dark   ink text on #93D98A       10.52 : 1
+   Colour is never the only signal: the tick and the cross carry
+   the state too.
+   ============================================================ */
+:root { --ok: #2A6335; --ok-rgb: 42,99,53; --on-ok: #FFFFFF; }
+body.dark { --ok: #93D98A; --ok-rgb: 147,217,138; --on-ok: #080C16; }
+
+.option.correct, .option-btn.correct,
+body.dark .option.correct,
+.option.correct .opt-text, .option-btn.correct .opt-text,
+.option.correct .opt-letter, .option-btn.correct .opt-letter,
+.option.correct .opt-mark, .option-btn.correct .opt-mark,
+body.dark .option.correct .opt-text, body.dark .option-btn.correct .opt-text,
+body.dark .option.correct .opt-letter, body.dark .option-btn.correct .opt-letter,
+body.dark .option.correct .opt-mark, body.dark .option-btn.correct .opt-mark {
+  color: var(--on-ok) !important;
+}
+.option.correct .opt-letter, .option-btn.correct .opt-letter { opacity: 0.85; }
+
+.option.wrong, .option-btn.wrong {
+  background: var(--no-bg) !important;
+  border: 2px solid var(--a2) !important;
+  box-shadow: none !important;
+}
+.option.wrong .opt-letter, .option.wrong .opt-mark,
+.option-btn.wrong .opt-letter, .option-btn.wrong .opt-mark { color: var(--a2) !important; }
+
+.inter-item.ok, body.dark .inter-item.ok {
+  background: var(--ok) !important;
+  border: 2px solid var(--ok) !important;
+  color: var(--on-ok) !important;
+}
+.inter-item.ok span, .inter-item.ok .rank,
+body.dark .inter-item.ok span, body.dark .inter-item.ok .rank { color: var(--on-ok) !important; }
+.inter-item.ok .rank { opacity: 0.85; }
+.bd-fill { background: var(--ok) !important; }
+
+/* ---- Correctness reads on the sort and the order --------------
+   Both used to change only by a pale tint after Check, close
+   enough to the placed state that the screen looked unchanged.
+   -------------------------------------------------------------- */
+.inter-item { justify-content: flex-start; }
+.inter-body { flex: 1 1 auto; }
+.inter-mark { font-weight: 700; font-size: 1.1rem; margin-left: 0.6rem; flex: 0 0 auto; }
+.inter-item.ok .inter-mark { color: var(--on-ok) !important; }
+.inter-item.no {
+  background: var(--no-bg) !important;
+  border: 2px solid var(--a2) !important;
+}
+.inter-item.no .inter-mark, .inter-item.no .rank { color: var(--a2) !important; }
+.inter-should {
+  display: block; margin-top: 0.3rem;
+  font-family: var(--sans); font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--a2);
+}
+
+/* A dashed border is the web's convention for a drop target and
+   there is no drag and drop anywhere in the page. */
+.sort-col { border-style: solid !important; }
+
+/* Sort columns stack on a phone. At 390px a two column grid gives
+   each column about 110px, and a ten word claim wraps to one word
+   a line. */
+@media (max-width: 560px) {
+  .sort-cols { grid-template-columns: 1fr; gap: 0.7rem; }
+  .sort-col { min-height: 3rem; }
+}
+
+/* An inline label that does nothing loses the accent, so the one
+   coloured thing a learner can open still looks openable. */
+.card p > strong:first-child, .source p > strong:first-child { color: var(--ink) !important; }
+.kt-term > summary {
+  color: var(--a2);
+  text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px;
+}
+
+/* Mark totals are printed on each question and nothing in the file explains them. */
+.marks-gloss {
+  font-family: var(--sans); font-size: 0.74rem; line-height: 1.5;
+  color: var(--fade); margin: -0.3rem 0 0.9rem;
+  border-left: 2px solid var(--hair-strong); padding-left: 0.6rem;
+}
+.score-note {
+  font-family: var(--sans); font-size: 0.8rem; line-height: 1.55;
+  color: var(--fade); text-align: center; margin: -0.4rem 0 1.3rem;
+}
+/* The reopen preview shows a sentence of the source now, not a
+   bibliography line, so it stops being uppercased. */
+.peek-who { text-transform: none !important; letter-spacing: 0 !important; }
+
+/* ---- THE TIME RAIL -------------------------------------------
+   A hook line may carry a marker, so a run of days reads as a run
+   of days rather than as a paragraph broken up. Backwards
+   compatible: a plain string line renders as it always did. The
+   gutter is sized for two short words.
+   ------------------------------------------------------------ */
+.story-line.marked {
+  display: grid; grid-template-columns: 5.2rem 1fr; gap: 0.7rem;
+  align-items: baseline; margin-bottom: 1.15rem;
+}
+.tl-mark {
+  font-family: var(--sans); font-size: 0.58rem; font-weight: 700;
+  letter-spacing: 0.10em; text-transform: uppercase; color: var(--a2);
+  border-left: 2px solid var(--a2); padding-left: 0.5rem; line-height: 1.5;
+}
+.tl-text { display: block; }
+.story-line.marked + .story-line:not(.marked) { margin-top: 1.8rem; }
+.story-line.marked.last {
+  color: var(--clay) !important; font-weight: 400 !important; font-style: normal !important;
+}
+.story-line.marked.last::before { display: none !important; }
+.story-line.last { font-style: normal !important; }
+@media (max-width: 400px) {
+  .story-line.marked { grid-template-columns: 4.8rem 1fr; gap: 0.6rem; }
+}
+
+
+/* ============================================================
+   MOBILE. Added August 2026.
+   Everything here is inside a narrow-screen query except the tap
+   target floor, which applies at every width because a 44px
+   target is not worse on a desktop. Nothing above 560px changes.
+   ============================================================ */
+
+/* Tap targets. Anything a learner presses is at least 44px tall,
+   which is the smallest reliable target for a thumb. */
+.btn-primary, .btn-secondary, .btn-small, .btn-skip, .btn-begin,
+.term-btn, .toggle-btn, .option, .ord-chip, .ord-slot, .sort-tag,
+.mode-toggle, #kula-mode-toggle, button.go, .opt, .chip[role="button"],
+.tglr, .termsbtn, .kt-term {
+  min-height: 44px;
+}
+
+@media (max-width: 560px) {
+  /* the page gutter takes width the text needs more than the margin does */
+  body { padding-left: 0.75rem; padding-right: 0.75rem; }
+
+  /* two sort columns at 360px leave about 135px each, which is
+     narrower than the sentences that go in them */
+  .sort-cols, .bins { grid-template-columns: 1fr; }
+
+  /* the results breakdown keeps its three columns and gives the
+     label more of them */
+  .bd-row      { grid-template-columns: 1fr 72px 38px; gap: 0.5rem; font-size: 0.8rem; }
+  .breakdown-row { grid-template-columns: 1fr 68px 36px; gap: 0.5rem; font-size: 0.8rem; }
+  .marked      { grid-template-columns: 1fr; }
+
+  /* two buttons plus a gap can exceed the line, so let them wrap
+     and fill instead of overflowing */
+  .nav, .cap-actions, .actions { flex-wrap: wrap; }
+  .nav > *, .cap-actions > *, .actions > * { flex: 1 1 auto; }
+
+  /* display type set for a laptop is too large for a phone */
+  .cover-title { font-size: 2rem; line-height: 1.12; }
+  .story-num   { font-size: 2.6rem; }
+  h1 { font-size: 1.75rem; line-height: 1.18; }
+  h2 { font-size: 1.3rem; line-height: 1.25; }
+
+  /* card padding on top of body padding leaves too little for text */
+  .card, .sheet, .sleeve, .source { padding-left: 1rem; padding-right: 1rem; }
+
+  /* long attributions and quoted lines must not push the page sideways */
+  .attr, .source-attr, .src-attr, blockquote, pre { overflow-wrap: anywhere; }
+}
+
+@media (max-width: 400px) {
+  .bd-row      { grid-template-columns: 1fr 56px 34px; font-size: 0.76rem; }
+  .breakdown-row { grid-template-columns: 1fr 54px 32px; font-size: 0.76rem; }
+  .cover-title { font-size: 1.7rem; }
+  .story-num   { font-size: 2.2rem; }
+}
+
+/* Correct and wrong are coded green and red, below the identity accent.
+   Correct was bordered with --a2 and wrong with --clay, neither of which says
+   right or wrong. --mark-ink flips with the mode alongside the tint so the
+   text cannot drift off its background. */
+:root{ --ok:#0F6B3F; --ok-tint:#E6F3EA; --no:#C1121F; --no-tint:#FBE3E4; --mark-ink:#101620; }
+body.dark{ --ok:#6EDA9B; --ok-tint:#12301F; --no:#FF6B5E; --no-tint:#3A1512; --mark-ink:#EAF0F9; }
+.option.correct, .option-btn.correct, .inter-item.ok,
+body.dark .option.correct, body.dark .option-btn.correct, body.dark .inter-item.ok{
+  background:var(--ok-tint) !important; border-color:var(--ok) !important; border-width:2px !important; }
+.option.wrong, .option-btn.wrong, .inter-item.no,
+body.dark .option.wrong, body.dark .option-btn.wrong, body.dark .inter-item.no{
+  background:var(--no-tint) !important; border-color:var(--no) !important; border-width:2px !important; }
+.option.correct, .option.correct .opt-text, .option.wrong, .option.wrong .opt-text,
+.option-btn.correct, .option-btn.correct .opt-text, .option-btn.wrong, .option-btn.wrong .opt-text,
+.inter-item.ok, .inter-item.ok span, .inter-item.no, .inter-item.no span,
+body.dark .option.correct, body.dark .option.correct .opt-text,
+body.dark .option.wrong, body.dark .option.wrong .opt-text,
+body.dark .option-btn.correct, body.dark .option-btn.correct .opt-text,
+body.dark .option-btn.wrong, body.dark .option-btn.wrong .opt-text,
+body.dark .inter-item.ok, body.dark .inter-item.ok span,
+body.dark .inter-item.no, body.dark .inter-item.no span{ color:var(--mark-ink) !important; }
+.option.correct .opt-letter, .option.correct .opt-mark,
+.option-btn.correct .opt-letter, .option-btn.correct .opt-mark,
+.inter-item.ok .inter-mark, .inter-item.ok .rank,
+body.dark .option.correct .opt-letter, body.dark .option.correct .opt-mark,
+body.dark .inter-item.ok .inter-mark{ color:var(--ok) !important; font-weight:800 !important; }
+.option.wrong .opt-letter, .option.wrong .opt-mark,
+.option-btn.wrong .opt-letter, .option-btn.wrong .opt-mark,
+.inter-item.no .inter-mark, .inter-item.no .rank,
+body.dark .option.wrong .opt-letter, body.dark .option.wrong .opt-mark,
+body.dark .inter-item.no .inter-mark{ color:var(--no) !important; font-weight:800 !important; }
+.explanation.ok, body.dark .explanation.ok{
+  background:var(--ok-tint) !important; border-left-color:var(--ok) !important; }
+.explanation.no, body.dark .explanation.no{
+  background:var(--no-tint) !important; border-left-color:var(--no) !important; }
+.explanation.ok, .explanation.ok .expl-text, .explanation.no, .explanation.no .expl-text,
+body.dark .explanation.ok, body.dark .explanation.ok .expl-text,
+body.dark .explanation.no, body.dark .explanation.no .expl-text{ color:var(--mark-ink) !important; }
+.explanation.ok .expl-label, body.dark .explanation.ok .expl-label{ color:var(--ok) !important; }
+.explanation.no .expl-label, body.dark .explanation.no .expl-label{ color:var(--no) !important; }
+</style>
+</head>
+<body class="dark">
+
+<div class="container">
+  <div class="top-bar hidden" id="top-bar">
+    <div class="top-meta"><span id="lesson-tag">Kula Revise &middot; Grade 12 &middot; Civil Rights</span><span class="top-count" id="step-count"></span></div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+  </div>
+  <div id="stage"></div>
+  <div class="nav hidden" id="nav">
+    <button class="btn-secondary" id="back-btn">&larr; Back</button>
+    <button class="btn-primary" id="next-btn">Continue &rarr;</button>
+  </div>
+</div>
+
+<script>
+/* ---- LMS EMBED EVENTS ----------------------------------------------------
+   Two moments, deliberately separate. Reaching the closing screen marks the
+   activity done for progress tracking. Choosing to leave it advances. Firing
+   advance on arrival would pull the learner off their own results screen
+   before they had read it. ------------------------------------------------ */
+var KulaLMS = (function(){
+  var done = false;
+  function send(ev){
+    try{
+      window.parent.postMessage({ type: 'lms-embed-event', version: '1.0',
+        payload: { event: ev } }, '*');
+    }catch(e){}
+  }
+  return {
+    completed: function(){ if(done) return; done = true; send('completed'); },
+    advance:   function(){ send('advance'); }
+  };
+})();
+/* kula: re-entry guard. Every declaration below is function scoped, so a
+   viewer that re-runs this script re-initialises instead of throwing a
+   redeclaration SyntaxError and leaving FLOW undefined. */
+(function(){
+const COVER = {
+  title: "Three Days of Peace and Music",
+  lines: ["A dairy farm, and a plan for fifty thousand.", "Rain, no food, and the fences down.", "A movement that asked for nothing at all."],
+  time: "About 20 minutes"
+};
+
+const RESULTS = {
+  "eyebrow": "Lesson 1 report",
+  "title": "Where you stand",
+  "next": "Continue to the check",
+  "footer": "Next: the second knowledge check, the boycott that found a method and a leader.",
+  "bands": {
+    "excellent": "You can already say what a source is for and what it cannot reach. Go on to Lesson 2.",
+    "strong": "Solid. Run the recap cards once more, then go on to Lesson 2.",
+    "solid": "The shape is there. Reread Source A and the two questions about what it leaves out, then go on.",
+    "patchy": "Worth another run before Lesson 2, because Lesson 2 asks you to hold two accounts against each other.",
+    "start": "This is the lesson everything else stands on. Take it again from the top and it will settle."
+  }
+};
+
+const FLOW = [
+  {
+    "type": "story",
+    "marker": "1969",
+    "markerLabel": "Bethel, New York &middot; August",
+    "lines": [
+      {
+        "text": "A dairy farm has been hired for a music festival billed as three days of peace and music."
+      },
+      {
+        "text": "The organisers expect about fifty thousand people."
+      },
+      {
+        "text": "Far more arrive. The roads jam, the fences come down, and it becomes a free festival because charging is no longer possible."
+      },
+      {
+        "text": "It rains for most of it. There is not enough food, water or shelter."
+      },
+      {
+        "text": "**Nothing about it worked as planned, and that became the point.**"
+      },
+      {
+        "text": "For the people there it proved a crowd that size could look after itself without anyone in charge. For many watching at home it proved the opposite."
+      }
+    ]
+  },
+  {
+    "type": "question",
+    "kind": "instinct",
+    "noSource": true,
+    "q": "Two people watch the same festival and reach opposite conclusions. What decides which one they reach?",
+    "options": [
+      "How accurately each of them remembers what happened there",
+      "What each of them already believed a society needs to work",
+      "Which newspaper each of them happened to read afterwards",
+      "How close to the stage each of them was actually standing"
+    ],
+    "correct": 1,
+    "explanation": "Both saw a crowd with no authority in charge. Whether that reads as proof or as warning depends on what you thought authority was for before you arrived. Option {opt2} matters and comes second. Hold this, because the counter-culture is judged almost entirely on that prior belief."
+  },
+  {
+    "type": "content",
+    "tag": "The turn",
+    "html": "<h2>Refusing Rather Than Demanding</h2><p>Every movement in this topic so far has asked a government for something: a law, a right, a withdrawal.</p><p class=\"pull\">The counter-culture asked for nothing. It withdrew instead.</p><p>Some students protested by dropping out of society altogether and becoming hippies. They rejected conformity and materialism. Two of their slogans were <em>don't trust anyone over thirty</em> and <em>make love, not war</em>.</p><p>That difference decides how you judge it. You cannot measure a refusal by asking what law it changed.</p>",
+    "remember": "The counter-culture withdrew rather than demanded. Judge it by what it changed in the culture, not in the statute book.",
+    "terms": [
+      {
+        "term": "Counter-culture",
+        "def": "A way of living deliberately set against the values of the mainstream, in this case rejecting conformity, materialism and deference to authority."
+      },
+      {
+        "term": "Baby boomers",
+        "body": "",
+        "def": "The generation born in the surge in the birth rate just after the Second World War. They grew up more prosperous and better educated than their parents."
+      }
+    ]
+  },
+  {
+    "type": "content",
+    "tag": "The evidence",
+    "html": "<h2>What They Actually Did</h2><p>Some lived in communes, wore psychedelic colours, and experimented with drugs and sex.</p><p>Thousands went to San Francisco in <span class=\"key\">1967</span> for what was called a Summer of Love. Two years later came the festival at Bethel, billed as three days of peace and music.</p><p>Many conservative Americans saw these activities as a serious challenge to the traditional values of society. That reaction is evidence too, and often better evidence than anything the participants said about themselves.</p>",
+    "remember": "Communes, the Summer of Love in 1967, the festival in 1969. The alarm they caused is itself evidence of what they threatened."
+  },
+  {
+    "type": "source",
+    "tag": "Source A",
+    "html": "<h2>How the festival described itself</h2><p>Start with the billing. What is being promised, and to whom?</p>",
+    "source": {
+      "attr": "Source A: from the advertising for the music festival held at Bethel, New York, in August 1969, and from contemporary press accounts of it.",
+      "body": "<p>The festival was billed as <em>three days of peace and music</em>, held on a dairy farm in the Catskills.</p><p>The organisers planned for around fifty thousand people and sold tickets accordingly. Far more arrived, the access roads were blocked, and the fences were taken down.</p><p>Press accounts describe heavy rain, shortages of food, water and sanitation, and a crowd that remained largely peaceful throughout.</p>",
+      "toggle": "Advertising and press reporting are two different kinds of source doing two different jobs. The billing tells you what the organisers wanted people to expect. The reporting tells you what journalists chose to record, which is not the same as everything that happened."
+    }
+  },
+  {
+    "type": "question",
+    "level": "Comprehend",
+    "marks": "2 marks",
+    "q": "According to Source A, how was the festival billed?",
+    "options": [
+      "As three days of peace and music",
+      "As a free festival open to everyone",
+      "As a protest against the war in Vietnam",
+      "As a fundraiser for a political campaign"
+    ],
+    "correct": 0,
+    "explanation": "Lift the billing from the source rather than from what you know happened. Option {opt1} is what it became once the fences came down. That difference is the whole story of the weekend, so do not take the outcome for the intention."
+  },
+  {
+    "type": "question",
+    "level": "Apply",
+    "marks": "2 marks",
+    "q": "The organisers planned for fifty thousand and far more came. What does that let you argue?",
+    "options": [
+      "The movement was larger than its organisers had realised",
+      "The organisers had deliberately understated the numbers",
+      "The festival was badly run and should not have happened",
+      "Most of those who came cared nothing for the music"
+    ],
+    "correct": 0,
+    "explanation": "A gap between the plan and the turnout is evidence about scale, so use it that way. Options {opt1} and {opt2} are judgements about the organisers rather than about the movement. Ask what a fact is evidence of before you decide what to do with it."
+  },
+  {
+    "type": "question",
+    "level": "Comprehend",
+    "marks": "2 marks",
+    "q": "In which year did thousands gather in San Francisco for the Summer of Love?",
+    "options": [
+      "1967",
+      "1965",
+      "1969",
+      "1970"
+    ],
+    "correct": 0,
+    "explanation": "{opt0}. Option {opt2} is the festival at Bethel, two years later. Keep the pair apart, because your account of how the counter-culture grew depends on which came first."
+  },
+  {
+    "type": "question",
+    "level": "Apply",
+    "marks": "2 marks",
+    "q": "You are asked what the counter-culture achieved. Why is that harder to answer than for the anti-war movement?",
+    "options": [
+      "It asked for nothing, so no single law shows its result",
+      "It was much smaller, so its effects were too slight to measure",
+      "It kept no records, so historians have no evidence about it",
+      "It ended too quickly for anyone to see what difference it made"
+    ],
+    "correct": 0,
+    "explanation": "A movement that demands something leaves a result you can name. A movement that refuses leaves changed expectations instead. Option {opt2} is not true, since the music, the writing and the press coverage are all evidence. Say what kind of change you are measuring before you say how much of it there was."
+  },
+  {
+    "type": "question",
+    "level": "Analyse",
+    "marks": "4 marks",
+    "q": "Why did conservative Americans find the counter-culture more threatening than the anti-war marches?",
+    "options": [
+      "A march disputes one policy, dropping out rejects them all",
+      "The counter-culture was far larger than the anti-war movement was",
+      "Marches were legal at the time and the counter-culture broke laws",
+      "The counter-culture was violent, while anti-war marches were not"
+    ],
+    "correct": 0,
+    "explanation": "You name the difference in kind. A policy can be argued about and changed. A refusal of the values underneath it cannot be answered by changing a policy. Option {opt2} is not true of most of what the counter-culture did, and option {opt3} inverts the record."
+  },
+  {
+    "type": "question",
+    "level": "Evaluate",
+    "marks": "6 marks",
+    "q": "How useful is Source A to a historian judging what the counter-culture achieved?",
+    "options": [
+      "Useful on one weekend and its scale, and silent on anything that lasted",
+      "Not useful, since advertising is written to sell and cannot be trusted",
+      "Completely useful, because the festival is what the movement is remembered for",
+      "Useful only for the numbers, since press accounts of crowds are always unreliable"
+    ],
+    "correct": 0,
+    "explanation": "Both halves. It is strong on that weekend and it cannot tell you what changed afterwards, which is what an achievement question is really asking. Option {opt1} discards advertising, and what organisers chose to promise is real evidence of what they thought people wanted."
+  },
+  {
+    "type": "content",
+    "tag": "The limit",
+    "html": "<h2>What Was Left</h2><p>By the end of <span class=\"key\">1970</span> the student protests had died down, partly because the American government had decided to withdraw from Vietnam.</p><p>Young people had earned new rights and new opportunities. In many countries the voting age was lowered from twenty-one to eighteen, so they now had a political voice. They also had more social freedom and greater say in their education.</p><p>So the movements that demanded things won measurable changes. The movement that refused instead changed what a generation thought was normal, which is harder to measure and not nothing.</p>",
+    "remember": "Demands won rights you can list. The refusal changed expectations, which is real and harder to count."
+  },
+  {
+    "type": "question",
+    "level": "Evaluate",
+    "marks": "4 marks",
+    "q": "How far did the counter-culture change American society?",
+    "options": [
+      "Some way. It shifted what a generation expected, and it repealed no law",
+      "Completely. It ended deference to authority across American life",
+      "Not at all. It produced no legislation and therefore changed nothing",
+      "It cannot be judged, since attitudes leave no evidence a historian can use"
+    ],
+    "correct": 0,
+    "explanation": "How far wants you to name the limit. Option {opt1} claims a total change that never happened. Option {opt2} treats law as the only kind of change, which would make most of cultural history unwritable. Option {opt3} gives up on evidence that exists in what people wrote, wore and sang."
+  },
+  {
+    "type": "carousel",
+    "tag": "Fact recap",
+    "heading": "Every date and name so far",
+    "cards": [
+      {
+        "lead": "1967",
+        "body": "Thousands gather in San Francisco for a Summer of Love."
+      },
+      {
+        "lead": "August 1969",
+        "body": "A festival at Bethel, New York, billed as three days of peace and music. Planned for fifty thousand, far more arrive, and the fences come down."
+      },
+      {
+        "lead": "Slogans",
+        "body": "Don't trust anyone over thirty. Make love, not war."
+      },
+      {
+        "lead": "By 1970",
+        "body": "Student protest subsides. In many countries the voting age is lowered from twenty-one to eighteen."
+      }
+    ]
+  }
+];
+
+const CHIP = {
+  Stand:{cls:"chip-a"}, Evidence:{cls:"chip-b"}, Focus:{cls:"chip-c"},
+  /* Analyse was missing, so fourteen scored items across the nine lessons fell
+     back to the Instinct chip and read to a learner as though unmarked. */
+  Comprehend:{cls:"chip-a"}, Apply:{cls:"chip-b"}, Analyse:{cls:"chip-c"}, Evaluate:{cls:"chip-d"},
+  instinct:{cls:"chip-instinct"}
+};
+// A lesson carries one spine or the other. Work it out on first use rather than at
+// load time, so this never depends on FLOW having been evaluated yet.
+const SOURCE_SPINE = ["Comprehend","Apply","Analyse","Evaluate"];
+const ESSAY_SPINE = ["Stand","Evidence","Focus","Counter"];
+let _spine = null;
+function spine(){
+  if(_spine) return _spine;
+  const flow = (typeof FLOW !== "undefined" && Array.isArray(FLOW)) ? FLOW : [];
+  _spine = flow.some(s => s && SOURCE_SPINE.includes(s.level)) ? SOURCE_SPINE : ESSAY_SPINE;
+  return _spine;
+}
+// Never let an unknown label throw: an unrecognised spine word degrades to the neutral chip.
+const chipCls = lvl => (CHIP[lvl] || CHIP.instinct).cls;
+
+const stage = document.getElementById("stage");
+const nav = document.getElementById("nav");
+const topBar = document.getElementById("top-bar");
+const nextBtn = document.getElementById("next-btn");
+const backBtn = document.getElementById("back-btn");
+
+const state = {
+  idx: -1,                 // -1 = cover
+  answers: {},             // qIdx -> chosen content index (mcq) or serialized (interactive)
+  revealed: {},            // qIdx -> bool
+  order: {},               // qIdx -> shuffled content-index array
+  carRead: {},             // stepIdx -> Set of read card indices
+  interState: {},          // qIdx -> working state for order/sort
+};
+
+const assessedIds = FLOW.map((f,i)=>(f.type==="question"&&f.level)?i:null).filter(i=>i!==null);
+
+function esc(s){
+  return String(s).replace(/[&<>"]/g, (c, i, str) => {
+    if(c === "&"){
+      // leave a real HTML entity intact (e.g. &middot; &amp; &#8635;)
+      const rest = str.slice(i);
+      if(/^&(#\d+|#x[0-9a-fA-F]+|[a-zA-Z]+);/.test(rest)) return "&";
+    }
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];
+  });
+}
+
+// {optN} -> the letter option N carries after shuffle
+function resolveOpts(text, order){
+  if(!text) return text;
+  return text.replace(/\{opt(\d+)\}/g,(m,n)=>{
+    const p = order ? order.indexOf(parseInt(n,10)) : -1;
+    return p>=0 ? String.fromCharCode(65+p) : m;
+  });
+}
+
+// ============ COVER ============
+function renderCover(){
+  topBar.classList.add("hidden");
+  nav.classList.add("hidden");
+  const lines = (COVER.lines||[]).map(l=>`<span>${esc(l)} </span>`).join("");
+  stage.innerHTML = `
+    <div class="cover">
+      <div class="cover-eyebrow">${COVER.eyebrow||""}</div>
+      <h1 class="cover-title">${esc(COVER.title||"")}</h1>
+      <div class="flourish"></div>
+      <div class="cover-line" id="cover-line">${lines}</div>
+      <button class="btn-begin" id="begin-btn">${COVER.begin||"Begin"} <span class="sa">&rarr;</span></button>
+      ${COVER.time?`<div class="cover-time">${esc(COVER.time)}</div>`:""}
+      ${COVER.skip!==false?`<button class="skip-link" id="skip-btn">Skip the opening if you have done this lesson before</button>`:""}
+    </div>`;
+  const spans = [...document.querySelectorAll("#cover-line span")];
+  spans.forEach((s,i)=>setTimeout(()=>s.classList.add("vis"), 350*(i+1)));
+  document.getElementById("begin-btn").addEventListener("click",()=>{ state.idx=0; render(); });
+  const skip = document.getElementById("skip-btn");
+  if(skip) skip.addEventListener("click",()=>{ state.idx = firstContentIdx(); render(); });
+}
+function firstContentIdx(){
+  const i = FLOW.findIndex(f=>f.type==="content"||f.type==="carousel"||f.type==="stat");
+  return i<0?0:i;
+}
+
+// ============ STORY HOOK ============
+function renderStory(item){
+  const lines = item.lines.map((l,i)=>{
+    const last = i===item.lines.length-1 ? " last" : "";
+    const o = (typeof l === "string") ? { text: l } : l;
+    const body = esc(o.text).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    const mk = o.mark ? `<span class="tl-mark">${esc(o.mark)}</span>` : "";
+    return `<div class="story-line${last}${o.mark?" marked":""}">${mk}<span class="tl-text">${body}</span></div>`;
+  }).join("");
+  stage.innerHTML = `
+    <div class="story${item.side?" story-"+item.side:""}">
+      <div class="story-num">${esc(item.marker)}</div>
+      <div class="story-unit">${esc(item.markerLabel||"")}</div>
+      <div class="story-rule"></div>
+      ${lines}
+    </div>`;
+  const els = [...stage.querySelectorAll(".story-line")];
+  nextBtn.disabled = true;
+  els.forEach((el,i)=>setTimeout(()=>{
+    el.classList.add("vis");
+    if(i===els.length-1) nextBtn.disabled = false;
+  }, 650*(i+1)));
+}
+
+// ============ STATIC CONTENT ============
+// Key-terms strip: label + one expandable chip per term.
+function ktStrip(terms){
+  if(!terms || !terms.length) return "";
+  const chips = terms.map(t=>`<details class="kt-term"><summary>${esc(t.term)}</summary><div class="kt-def">${esc(t.def)}</div></details>`).join("");
+  return `<div class="kt"><div class="kt-label">Key terms &middot; open any of these</div><div class="kt-row">${chips}</div></div>`;
+}
+function rememberBox(text){
+  if(!text) return "";
+  return `<details class="remember"><summary>Remember it like this</summary><div class="disc-body">${text}</div></details>`;
+}
+
+function renderContent(item){
+  stage.innerHTML = `<div class="card">${item.tag?`<div class="stage-tag">${esc(item.tag)}</div>`:""}${item.html}${rememberBox(item.remember)}${ktStrip(item.terms)}</div>`;
+  bindToggles();
+}
+
+// ============ CAROUSEL ============
+function renderCarousel(item){
+  const cards = item.cards;
+  if(!state.carRead[state.idx]) state.carRead[state.idx] = new Set([0]);
+  const read = state.carRead[state.idx];
+  const pos = state.interState[state.idx]?.pos || 0;
+  read.add(pos);
+  const c = cards[pos];
+  const body = typeof c==="string" ? c : `<span class="cc-lead">${esc(c.lead)}</span>${esc(c.body)}`;
+  const dots = cards.map((_,i)=>`<span class="car-dot ${read.has(i)?"read":""} ${i===pos?"here":""}"></span>`).join("");
+  const allRead = read.size===cards.length;
+  stage.innerHTML = `
+    <div class="card">
+      ${item.tag?`<div class="stage-tag">${esc(item.tag)}</div>`:""}
+      ${item.heading?`<h2>${esc(item.heading)}</h2>`:""}
+      <div class="car-wrap">
+        <div class="car-prompt" id="car-prompt">${allRead?`That is all ${cards.length}. Continue is unlocked.`:`Use the arrows to read all ${cards.length}. Continue unlocks when you have.`}</div>
+        <div class="car-frame"><div class="car-card">${body}</div></div>
+        <div class="car-nav">
+          <div class="car-dots">${dots}</div>
+          <div class="car-count">${pos+1} / ${cards.length}</div>
+          <div class="car-btns">
+            <button class="car-btn" id="car-prev" ${pos===0?"disabled":""}>&larr;</button>
+            <button class="car-btn" id="car-next" ${pos===cards.length-1?"disabled":""}>&rarr;</button>
+          </div>
+        </div>
+      </div>
+      ${ktStrip(item.terms)}
+    </div>`;
+  nextBtn.disabled = !allRead;
+  const setPos=(p)=>{ state.interState[state.idx]={pos:p}; renderCarousel(item); };
+  const pv=document.getElementById("car-prev"), nx=document.getElementById("car-next");
+  if(pv) pv.addEventListener("click",()=>setPos(Math.max(0,pos-1)));
+  if(nx) nx.addEventListener("click",()=>setPos(Math.min(cards.length-1,pos+1)));
+}
+
+// ============ STAT STRIP ============
+function renderStat(item){
+  const stats = item.stats.map(s=>`<div class="stat"><div class="stat-num">${esc(s.num)}</div><div class="stat-label">${esc(s.label)}</div></div>`).join("");
+  stage.innerHTML = `
+    <div class="card">
+      ${item.tag?`<div class="stage-tag">${esc(item.tag)}</div>`:""}
+      ${item.heading?`<h2>${esc(item.heading)}</h2>`:""}
+      ${item.lead?`<p>${item.lead}</p>`:""}
+      <div class="stat-strip">${stats}</div>
+      ${ktStrip(item.terms)}
+    </div>`;
+}
+
+
+// Reopen strip: shown on a question that follows a source, so the learner
+// never has to tap Back to reread the extract.
+//
+// v2.1. Was: the strip offered LAST_SOURCE only. That is correct for a lesson
+// built on one source and wrong for a capstone, where the last question
+// asks for all of them and a learner on the closing screens could reach only
+// the most recent. Now every source seen so far in the file is reachable: a row
+// of tabs, and a swipeable track underneath. One source renders exactly as
+// before, so nothing in the existing corpus changes.
+function sourcePeek(item){
+  if(item.noSource) return "";
+  if(item.sourceRef && item.sourceRef.body){
+    return peekShell([item.sourceRef]);
+  }
+  const seen = SOURCES_SEEN.filter(s => s && s.body);
+  if(!seen.length) return "";
+  return peekShell(seen);
+}
+
+function peekShell(list){
+  const many = list.length > 1;
+  const cue = many
+    ? `Open the ${list.length} sources again`
+    : `Open ${esc(/^The /.test(list[0].label) ? list[0].label.charAt(0).toLowerCase()+list[0].label.slice(1) : list[0].label)} again`;
+  // Preview the source, not its bibliography, and never cut a word in half.
+  const peekWords = (html)=>{
+    let s = String(html||"")
+      .replace(/<div class="(src-imprint|cable-head)"[\s\S]*?<\/div>/g," ")
+      .replace(/<[^>]*>/g," ")
+      .replace(/&nbsp;/g," ").replace(/&hellip;/g,"...")
+      .replace(/\s+/g," ").trim();
+    if(s.length<=84) return esc(s);
+    let cut = s.slice(0,84);
+    const sp = cut.lastIndexOf(" ");
+    if(sp>40) cut = cut.slice(0,sp);
+    return esc(cut) + "&hellip;";
+  };
+  const who = many
+    ? list.map(s=>esc(s.label)).join(" &middot; ")
+    : peekWords(list[0].body);
+  const tabs = many
+    ? `<div class="peek-tabs" role="tablist">${list.map((s,i)=>
+        `<button class="peek-tab${i===list.length-1?" on":""}" data-peek="${i}" role="tab">${esc(s.label)}</button>`).join("")}</div>`
+    : "";
+  const track = `<div class="peek-track" data-peek-track>${list.map(s=>
+      `<div class="peek-slide"><div class="peek-attr">${s.attr}</div>${s.body}</div>`).join("")}</div>`;
+  return `<details class="srcpeek${many?" multi":""}"><summary>
+      <svg class="chev" width="11" height="13" viewBox="0 0 11 13" fill="none" aria-hidden="true"><path d="M2 1.5 L8.5 6.5 L2 11.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="peek-cue">${cue}<span class="peek-who">${who}</span></span>
+    </summary><div class="peek-body">${tabs}${track}</div></details>`;
+}
+
+// Tabs scroll the track; swiping the track updates the tabs. Both work alone,
+// so a learner who never notices the tabs can still swipe, and the other way round.
+function bindPeek(){
+  stage.querySelectorAll(".srcpeek.multi").forEach(d=>{
+    const track = d.querySelector("[data-peek-track]");
+    const tabs  = Array.from(d.querySelectorAll(".peek-tab"));
+    if(!track || !tabs.length) return;
+    const go = i => track.scrollTo({ left: i * track.clientWidth, behavior: "smooth" });
+    tabs.forEach(t => t.addEventListener("click", () => go(parseInt(t.dataset.peek,10))));
+    let tick = null;
+    track.addEventListener("scroll", () => {
+      clearTimeout(tick);
+      tick = setTimeout(() => {
+        const i = Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+        tabs.forEach((t,n) => t.classList.toggle("on", n === i));
+      }, 60);
+    });
+    // open on the source the learner saw last, which is the one they were reading
+    d.addEventListener("toggle", () => {
+      if(d.open) requestAnimationFrame(() => { track.scrollLeft = (tabs.length-1) * track.clientWidth; });
+    });
+  });
+}
+function stripTags(h){ return String(h||"").replace(/<[^>]+>/g,""); }
+
+// ============ SOURCE ============
+// Every source rendered so far, in order, so any later question can reopen all
+// of them. LAST_SOURCE is kept as the final entry for anything still reading it.
+let SOURCES_SEEN = [];
+let LAST_SOURCE = null;
+
+function renderSource(item){
+  const s=item.source;
+  LAST_SOURCE = { label: item.sourceLabel || item.tag || "the source", attr: s.attr, body: s.body };
+  if(!SOURCES_SEEN.some(x => x.label === LAST_SOURCE.label)) SOURCES_SEEN.push(LAST_SOURCE);
+  stage.innerHTML = `
+    <div class="card">
+      ${item.tag?`<div class="stage-tag">${esc(item.tag)}</div>`:""}
+      ${item.html||""}
+      <div class="source">
+        <div class="source-attr">${s.attr}</div>
+        <div class="source-body">${s.body}</div>
+        ${s.toggle?`<button class="toggle-btn" data-toggle>${s.toggleLabel||"What does this actually mean?"}</button><div class="toggle-body">${s.toggle}</div>`:""}
+      </div>
+      ${ktStrip(item.terms)}
+    </div>`;
+  bindToggles();
+}
+
+
+// A mark allocation is part of the teaching, but the notation is never
+// explained anywhere. Gloss it once, on the first assessed question that
+// carries one, and pin it to that question so Back and forward show the
+// same screen twice.
+let _glossAt = null;
+function marksGloss(marks){
+  if(!marks || (_glossAt!==null && _glossAt!==state.idx)) return "";
+  const m = String(marks).match(/\((\d+)\s*x\s*(\d+)\)/);
+  if(!m) return "";
+  _glossAt = state.idx;
+  const pts = parseInt(m[1],10), each = parseInt(m[2],10);
+  const mk = each===1 ? "1 mark" : each+" marks";
+  const p = pts===1 ? `one point, worth ${mk}` : `${pts} separate points, each worth ${mk}`;
+  return `<div class="marks-gloss">That bracket is exam notation. It means the marker wants ${p}.</div>`;
+}
+
+// ============ QUESTION (mcq / order / sort) ============
+function renderQuestion(item){
+  if(item.mode==="order") return renderOrder(item);
+  if(item.mode==="sort") return renderSort(item);
+  return renderMCQ(item);
+}
+
+function renderMCQ(item){
+  const answered = state.revealed[state.idx];
+  if(!state.order[state.idx]){
+    const a=item.options.map((_,i)=>i);
+    for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+    state.order[state.idx]=a;
+  }
+  const order=state.order[state.idx];
+  const chip = item.level ? `<span class="chip ${chipCls(item.level)}">${item.level}</span>` : `<span class="chip chip-instinct">Instinct</span>`;
+  let opts="";
+  order.forEach((orig,pos)=>{
+    let cls="option", mark="";
+    if(answered){
+      if(orig===item.correct){ cls+=" correct"; mark=`<span class="opt-mark">&#10003;</span>`; }
+      else if(orig===state.answers[state.idx]){ cls+=" wrong"; mark=`<span class="opt-mark">&#10007;</span>`; }
+      else cls+=" dimmed";
+    } else if(state.answers[state.idx]===orig){ cls+=" selected"; }
+    opts+=`<button class="${cls}" data-orig="${orig}" ${answered?"disabled":""}><span class="opt-letter">${String.fromCharCode(65+pos)}</span><span class="opt-text">${item.options[orig]}</span>${mark}</button>`;
+  });
+  stage.innerHTML = `
+    <div class="card">
+      <div class="q-meta">${chip}${item.marks?`<span class="marks">${esc(item.marks)}</span>`:""}</div>${marksGloss(item.marks)}
+      ${sourcePeek(item)}
+      <div class="q-text">${item.q}</div>
+      <div class="options">${opts}</div>
+      ${answered?`<div class="explanation"><div class="expl-label">Why</div><div class="expl-text">${resolveOpts(item.explanation, order)}</div></div>`:""}
+    </div>`;
+  if(!answered){
+    stage.querySelectorAll(".option").forEach(b=>b.addEventListener("click",()=>{
+      state.answers[state.idx]=parseInt(b.dataset.orig,10);
+      state.revealed[state.idx]=true;
+      render();
+    }));
+  }
+  syncNav(true);
+}
+
+// order: tap to place into a numbered list, tap placed to remove; Check when all placed
+function renderOrder(item){
+  const answered = state.revealed[state.idx];
+  const st = state.interState[state.idx] || (state.interState[state.idx]={placed:[]});
+  const placed = st.placed;                       // array of content indices in chosen order
+  const remaining = item.items.map((_,i)=>i).filter(i=>!placed.includes(i));
+  let placedHtml = placed.map((ci,pos)=>{
+    let cls="inter-item inter-placed", mark="", should="";
+    if(answered){
+      const right = ci===item.answer[pos];
+      cls = "inter-item "+(right?"ok":"no");
+      mark = `<span class="inter-mark">${right?"&#10003;":"&#10007;"}</span>`;
+      if(!right) should = `<span class="inter-should">belongs at ${item.answer.indexOf(ci)+1}</span>`;
+    }
+    return `<button class="${cls}" data-placed="${ci}" ${answered?"disabled":""}><span class="rank">${pos+1}</span><span class="inter-body">${esc(item.items[ci])}${should}</span>${mark}</button>`;
+  }).join("");
+  // The pool is shuffled once and remembered, so an order question can never
+  // present its events already close to sequence.
+  if(!st.pool){
+    const a=item.items.map((_,i)=>i);
+    for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+    st.pool=a;
+  }
+  const poolOrder = st.pool.filter(ci=>remaining.includes(ci));
+  let poolHtml = poolOrder.map(ci=>`<button class="inter-item" data-pool="${ci}"><span class="rank">&bull;</span><span>${esc(item.items[ci])}</span></button>`).join("");
+  stage.innerHTML = `
+    <div class="card">
+      <div class="q-meta"><span class="chip ${item.level?chipCls(item.level):"chip-instinct"}">${item.level||"Instinct"}</span>${item.marks?`<span class="marks">${esc(item.marks)}</span>`:""}</div>${marksGloss(item.marks)}
+      ${sourcePeek(item)}
+      <div class="q-text">${item.q}</div>
+      <div class="inter">
+        <div class="inter-pool" id="placed">${placedHtml||`<div style="color:var(--fade);font-size:0.9rem;padding:0.4rem 0;">Choose an event below to start putting them in order.</div>`}</div>
+        ${remaining.length?`<div style="height:1px;background:rgba(16,22,32,0.14);margin:0.9rem 0;"></div><div class="inter-pool" id="pool">${poolHtml}</div>`:""}
+      </div>
+      ${answered?`<div class="explanation"><div class="expl-label">Why</div><div class="expl-text">${resolveOpts(item.explanation,null)}</div></div>`:""}
+    </div>`;
+  if(!answered){
+    stage.querySelectorAll("[data-pool]").forEach(b=>b.addEventListener("click",()=>{ placed.push(parseInt(b.dataset.pool,10)); renderOrder(item); }));
+    stage.querySelectorAll("[data-placed]").forEach(b=>b.addEventListener("click",()=>{ const ci=parseInt(b.dataset.placed,10); st.placed=placed.filter(x=>x!==ci); renderOrder(item); }));
+  }
+  const allPlaced = placed.length===item.items.length;
+  syncNavInteractive(allPlaced, answered, ()=>{
+    state.answers[state.idx]=placed.slice();
+    state.revealed[state.idx]=true; render();
+  });
+}
+
+// sort: two columns, tap an item's column button to place, tap placed to remove
+function renderSort(item){
+  const answered = state.revealed[state.idx];
+  const st = state.interState[state.idx] || (state.interState[state.idx]={col:{}});
+  const col = st.col;                              // content index -> 0/1
+  const unplaced = item.items.map((_,i)=>i).filter(i=>!(i in col));
+  const colCards = (which)=>item.items.map((it,ci)=>{
+    if(col[ci]!==which) return "";
+    let cls="inter-item inter-placed", mark="";
+    if(answered){
+      const right = item.answer[ci]===which;
+      cls="inter-item "+(right?"ok":"no");
+      mark = `<span class="inter-mark">${right?"&#10003;":"&#10007;"}</span>`;
+    }
+    return `<button class="${cls}" data-un="${ci}" ${answered?"disabled":""}><span class="inter-body">${esc(it)}</span>${mark}</button>`;
+  }).join("");
+  const pool = unplaced.map(ci=>`
+    <div class="inter-item" style="flex-direction:column;align-items:stretch;cursor:default;">
+      <span>${esc(item.items[ci])}</span>
+      <div class="sort-btns">
+        <button class="sort-place" data-place="${ci}" data-col="0">${esc(item.cols[0])}</button>
+        <button class="sort-place" data-place="${ci}" data-col="1">${esc(item.cols[1])}</button>
+      </div>
+    </div>`).join("");
+  stage.innerHTML = `
+    <div class="card">
+      <div class="q-meta"><span class="chip ${item.level?chipCls(item.level):"chip-instinct"}">${item.level||"Instinct"}</span>${item.marks?`<span class="marks">${esc(item.marks)}</span>`:""}</div>${marksGloss(item.marks)}
+      ${sourcePeek(item)}
+      <div class="q-text">${item.q}</div>
+      <div class="inter">
+        <div class="sort-cols">
+          <div class="sort-col"><h4>${esc(item.cols[0])}</h4>${colCards(0)}</div>
+          <div class="sort-col"><h4>${esc(item.cols[1])}</h4>${colCards(1)}</div>
+        </div>
+        ${unplaced.length?`<div style="height:1px;background:rgba(16,22,32,0.14);margin:0.9rem 0;"></div><div class="inter-pool">${pool}</div>`:""}
+      </div>
+      ${answered?`<div class="explanation"><div class="expl-label">Why</div><div class="expl-text">${resolveOpts(item.explanation,null)}</div></div>`:""}
+    </div>`;
+  if(!answered){
+    stage.querySelectorAll("[data-place]").forEach(b=>b.addEventListener("click",()=>{ col[parseInt(b.dataset.place,10)]=parseInt(b.dataset.col,10); renderSort(item); }));
+    stage.querySelectorAll("[data-un]").forEach(b=>b.addEventListener("click",()=>{ delete col[parseInt(b.dataset.un,10)]; renderSort(item); }));
+  }
+  const allPlaced = unplaced.length===0;
+  syncNavInteractive(allPlaced, answered, ()=>{
+    state.answers[state.idx]=Object.assign({},col);
+    state.revealed[state.idx]=true; render();
+  });
+}
+
+// ============ NAV ============
+function syncNav(isQuestion){
+  nav.classList.remove("hidden");
+  backBtn.disabled=false;
+  backBtn.innerHTML = state.idx===0 ? "&larr; Back to the start" : "&larr; Back";
+  nextBtn.style.display="";
+  nextBtn.disabled = isQuestion ? !state.revealed[state.idx] : false;
+  nextBtn.innerHTML = state.idx===FLOW.length-1 ? "See results &rarr;" : "Continue &rarr;";
+}
+// interactive items: replace Continue with a Check button until answered
+function syncNavInteractive(canCheck, answered, onCheck){
+  nav.classList.remove("hidden");
+  backBtn.disabled=false;
+  backBtn.innerHTML = state.idx===0 ? "&larr; Back to the start" : "&larr; Back";
+  if(answered){
+    nextBtn.style.display="";
+    nextBtn.disabled=false;
+    nextBtn.innerHTML = state.idx===FLOW.length-1 ? "See results &rarr;" : "Continue &rarr;";
+    nextBtn.onclick = defaultNext;
+  } else {
+    nextBtn.style.display="";
+    nextBtn.disabled=!canCheck;
+    nextBtn.innerHTML="Check &rarr;";
+    nextBtn.onclick = ()=>{ onCheck(); };
+  }
+}
+
+function defaultNext(){
+  if(state.idx<FLOW.length-1){ state.idx++; render(); } else showResults();
+}
+
+nextBtn.onclick = defaultNext;
+backBtn.addEventListener("click",()=>{
+  if(state.idx<=0){ state.idx=-1; renderCover(); }
+  else { state.idx--; render(); }
+});
+
+// ============ RENDER DISPATCH ============
+function render(){
+  window.scrollTo({top:0,behavior:"instant"});
+  if(state.idx===-1){ renderCover(); return; }
+  topBar.classList.remove("hidden");
+  document.getElementById("step-count").textContent=`Step ${state.idx+1} of ${FLOW.length}`;
+  document.getElementById("fill").style.width=((state.idx+1)/FLOW.length*100)+"%";
+  const item=FLOW[state.idx];
+  nextBtn.onclick = defaultNext;
+  switch(item.type){
+    case "story": renderStory(item); syncNav(false); break;
+    case "carousel": renderCarousel(item); /* nav handled inside */ syncNavCarousel(); break;
+    case "stat": renderStat(item); syncNav(false); break;
+    case "source": renderSource(item); syncNav(false); break;
+    case "question": renderQuestion(item); break;
+    default: renderContent(item); syncNav(false);
+  }
+}
+function syncNavCarousel(){
+  nav.classList.remove("hidden");
+  backBtn.disabled=false;
+  backBtn.innerHTML = state.idx===0 ? "&larr; Back to the start" : "&larr; Back";
+  nextBtn.style.display="";
+  nextBtn.innerHTML = state.idx===FLOW.length-1 ? "See results &rarr;" : "Continue &rarr;";
+  // disabled state already set inside renderCarousel
+}
+
+function bindToggles(){
+  bindPeek();
+  stage.querySelectorAll("[data-toggle]").forEach(b=>b.addEventListener("click",()=>{
+    b.nextElementSibling.classList.toggle("open");
+  }));
+}
+
+// ============ RESULTS ============
+function showResults(){
+  topBar.classList.add("hidden");
+  nav.classList.add("hidden");
+  let correct=0;
+  assessedIds.forEach(i=>{ if(isRight(i)) correct++; });
+  const total=assessedIds.length;
+  const pct = total?Math.round(correct/total*100):0;
+  let band="", desc="";
+  if(pct>=85){ band="Excellent"; desc=RESULTS.bands.excellent; }
+  else if(pct>=70){ band="Strong"; desc=RESULTS.bands.strong; }
+  else if(pct>=55){ band="Solid"; desc=RESULTS.bands.solid; }
+  else if(pct>=40){ band="Patchy"; desc=RESULTS.bands.patchy; }
+  else { band="Start again"; desc=RESULTS.bands.start; }
+  const rows=spine().map(sp=>{
+    const ids=assessedIds.filter(i=>FLOW[i].level===sp);
+    if(!ids.length) return "";
+    const g=ids.filter(i=>isRight(i)).length;
+    const p=Math.round(g/ids.length*100);
+    return `<div class="bd-row"><div class="bd-name">${sp}</div><div class="bd-bar"><div class="bd-fill" style="width:${p}%"></div></div><div class="bd-score">${g}/${ids.length}</div></div>`;
+  }).join("");
+  stage.innerHTML = `
+    <div class="results-head">
+      <div class="results-eyebrow">${RESULTS.eyebrow||"Lesson report"}</div>
+      <h1 class="results-title">${esc(RESULTS.title||"Where you stand")}</h1>
+    </div>
+    <div class="score-row">
+      <div class="score-block"><div class="score-num">${correct}<span class="score-den">/${total}</span></div><div class="score-label">Questions right</div></div>
+      <div class="score-block"><div class="score-num">${pct}<span class="score-den">%</span></div><div class="score-label">Accuracy</div></div>
+      <div class="score-block"><div class="score-word">${band}</div><div class="score-label">Band</div></div>
+    </div>
+    <div class="grade-desc">${desc}</div>
+    <div class="score-note">The score above counts questions. The marks printed on each question are what it would carry in the exam, so the two numbers differ.</div>
+    <div class="breakdown"><div class="breakdown-label">By skill</div>${rows}</div>
+    <div class="results-actions">
+      <button class="btn-secondary" id="restart-btn">Restart lesson</button>
+      <button class="btn-primary" id="finish-btn">${esc(RESULTS.next||"Continue")} &rarr;</button>
+    </div>
+    ${RESULTS.footer?`<div style="text-align:center;margin-top:1.1rem;padding-bottom:4.5rem;font-size:0.92rem;color:var(--fade);">${esc(RESULTS.footer)}</div>`:""}`;
+  document.getElementById("restart-btn").addEventListener("click",()=>{
+    state.idx=-1; state.answers={}; state.revealed={}; state.order={}; state.carRead={}; state.interState={};
+    renderCover();
+  });
+  /* The button at the end of the lesson is the thing that continues. It does
+     not point at a control somewhere else on the page. */
+  document.getElementById("finish-btn").onclick = ()=>{ KulaLMS.advance(); };
+  KulaLMS.completed();
+}
+
+function isRight(i){
+  const item=FLOW[i]; const ans=state.answers[i];
+  if(ans===undefined) return false;
+  if(item.mode==="order") return JSON.stringify(ans)===JSON.stringify(item.answer);
+  if(item.mode==="sort"){ return item.items.every((_,ci)=>ans[ci]===item.answer[ci]); }
+  return ans===item.correct;
+}
+
+renderCover();
+})();
+
+
+/* ---- MODE TOGGLE ---------------------------------------------------------
+   Injects its own button so there is no stray markup, and lives inside the
+   single script block so a first-to-last script extraction still parses. */
+(function(){
+  /* What is stored is the mode the learner chose, "light" or "dark". Never a
+     class name and never "native". For an essay unit set NATIVE "dark",
+     FLIP "light", CLS "bright". Nothing else changes. */
+  var NATIVE = "light";   // the mode the stylesheet produces with no class on body
+  var FLIP   = "dark";    // the mode the class produces
+  var CLS    = "dark";    // the class that produces FLIP in this unit
+  /* The unit OPENS in dark. body carries the class in the markup rather than
+     having it added here, so there is no flash of the light ground before
+     this script runs at the foot of the document. All this block does is
+     honour a learner who has already chosen otherwise. */
+  var stored = null;
+  try{ stored = localStorage.getItem("kula-mode"); }catch(e){}
+  if(stored === NATIVE) document.body.classList.remove(CLS);
+  else if(stored === FLIP) document.body.classList.add(CLS);
+     else if(window.matchMedia && !window.matchMedia("(prefers-color-scheme: dark)").matches) document.body.classList.remove(CLS);
+  var SUN='<circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/>';
+  var MOON='<path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/>';
+  var b=document.getElementById("kula-mode-toggle");
+  if(!b){
+    b=document.createElement("button");
+    b.className="mode-toggle"; b.id="kula-mode-toggle"; b.type="button";
+    b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" id="mode-icon"></svg><span id="mode-label"></span>';
+    document.body.appendChild(b);
+  }
+  var lab=document.getElementById("mode-label"), ic=document.getElementById("mode-icon");
+  function paint(){
+    var flipped = document.body.classList.contains(CLS);
+    var showing = flipped ? FLIP : NATIVE;
+    var offering = showing==="dark" ? "light" : "dark";
+    lab.textContent = offering==="light" ? "Light mode" : "Dark mode";
+    ic.innerHTML = offering==="light" ? SUN : MOON;
+    b.setAttribute("aria-pressed", showing==="dark" ? "true" : "false");
+    b.setAttribute("aria-label", "Switch to " + offering + " mode");
+    b.setAttribute("title", offering==="light" ? "Light mode" : "Dark mode");
+  }
+  b.addEventListener("click",function(){
+    var flipped=document.body.classList.toggle(CLS);
+    try{ localStorage.setItem("kula-mode", flipped ? FLIP : NATIVE); }catch(e){}
+    paint();
+  });
+  paint();
+
+})();
+</script>
+
+<script>
+/* The Why block takes the colour of the outcome. Written only when something
+   changed, with the observer disconnected while writing, so it cannot loop. */
+(function(){
+  var obs = null;
+  function tag(){
+    if(!document || !document.querySelector) return;
+    var ex = document.querySelector(".explanation");
+    if(!ex) return;
+    var right;
+    if(document.querySelector(".option.wrong, .option-btn.wrong, .inter-item.no")) right = false;
+    else if(document.querySelector(".option.correct, .option-btn.correct, .inter-item.ok")) right = true;
+    else return;
+    var wantCls = right ? "ok" : "no";
+    var wantLab = right ? "Correct" : "Not this one";
+    var lab = ex.querySelector(".expl-label");
+    if(ex.classList.contains(wantCls) && (!lab || lab.textContent === wantLab)) return;
+    if(obs) obs.disconnect();
+    ex.classList.toggle("ok", right);
+    ex.classList.toggle("no", !right);
+    if(lab && lab.textContent !== wantLab) lab.textContent = wantLab;
+    if(obs && document.body) obs.observe(document.body,{childList:true,subtree:true});
+  }
+  function safeTag(){ try{ tag(); }catch(e){} }
+  document.addEventListener("click", safeTag);
+  document.addEventListener("click", function(){ setTimeout(safeTag, 0); });
+  if(document.body){ obs = new MutationObserver(safeTag); obs.observe(document.body,{childList:true,subtree:true}); }
+})();
+</script>
+</body>
+</html>
